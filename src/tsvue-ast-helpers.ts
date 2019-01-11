@@ -14,12 +14,12 @@ export function genImports(path, collect, state) {
   const importVue = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Vue'))], t.stringLiteral('vue'))
   const importVueClassComponent = t.importDeclaration(
     [t.importDefaultSpecifier(t.identifier('Component'))],
-    t.stringLiteral('vue-class-component'),
+    t.stringLiteral('vue-class-component')
   )
   if (Object.keys(state.props).length) {
     const importPropTypes = t.importDeclaration(
       [t.importSpecifier(t.identifier('Prop'), t.identifier('Prop'))],
-      t.stringLiteral('vue-property-decorator'),
+      t.stringLiteral('vue-property-decorator')
     )
     collect.imports.push(importPropTypes)
   }

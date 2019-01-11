@@ -32,7 +32,7 @@ const nestedMethodsVisitor = {
             memPath.stop()
           },
         },
-        { state: this.state },
+        { state: this.state }
       )
     }
 
@@ -48,7 +48,7 @@ const nestedMethodsVisitor = {
           memPath.stop()
         },
       },
-      { state: this.state },
+      { state: this.state }
     )
     this.blocks.push(path.node)
   },
@@ -112,8 +112,8 @@ function createRenderMethod(path, state, name) {
           attrPath.replaceWith(
             t.jSXAttribute(
               t.jSXIdentifier('dangerouslySetInnerHTML'),
-              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), attrNode.value)])),
-            ),
+              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), attrNode.value)]))
+            )
           )
         } else if (t.isJSXExpressionContainer(v)) {
           const expression = v.expression
@@ -128,8 +128,8 @@ function createRenderMethod(path, state, name) {
           attrPath.replaceWith(
             t.jSXAttribute(
               t.jSXIdentifier('dangerouslySetInnerHTML'),
-              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), expression)])),
-            ),
+              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), expression)]))
+            )
           )
         }
       }

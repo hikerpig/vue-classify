@@ -25,7 +25,7 @@ const nestedMethodsVisitor = {
             memPath.stop()
           },
         },
-        { state: this.state },
+        { state: this.state }
       )
     }
 
@@ -45,7 +45,7 @@ const nestedMethodsVisitor = {
           memPath.stop()
         },
       },
-      { state: this.state },
+      { state: this.state }
     )
     const varNode = t.variableDeclaration('const', [t.variableDeclarator(t.identifier(this.key), path.node.argument)])
     this.statements.push(varNode)

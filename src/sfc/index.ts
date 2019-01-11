@@ -82,8 +82,8 @@ export default function traverseTemplate(template, state) {
       if (name && !definedInFor.includes(name) && path.container) {
         path.replaceWith(
           t.jSXExpressionContainer(
-            t.memberExpression(t.memberExpression(t.thisExpression(), getIdentifier(state, name)), t.identifier(name)),
-          ),
+            t.memberExpression(t.memberExpression(t.thisExpression(), getIdentifier(state, name)), t.identifier(name))
+          )
         )
         // return;
       }

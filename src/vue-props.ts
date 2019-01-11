@@ -70,7 +70,7 @@ const nestedPropsVisitor = {
               this.state.props[this.childKey].validator = path.node
             },
           },
-          { state: this.state, childKey: this.childKey },
+          { state: this.state, childKey: this.childKey }
         )
       }
     }

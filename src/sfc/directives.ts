@@ -15,8 +15,8 @@ export function handleIfDirective(path, value, state) {
 
   parentPath.replaceWith(
     t.jSXExpressionContainer(
-      t.conditionalExpression(test, parentPath.node, nextElement ? nextElement : t.nullLiteral()),
-    ),
+      t.conditionalExpression(test, parentPath.node, nextElement ? nextElement : t.nullLiteral())
+    )
   )
 
   path.remove()
@@ -34,11 +34,11 @@ export function handleShowDirective(path, value, state) {
         t.objectExpression([
           t.objectProperty(
             t.identifier('display'),
-            t.conditionalExpression(test, t.stringLiteral('block'), t.stringLiteral('none')),
+            t.conditionalExpression(test, t.stringLiteral('block'), t.stringLiteral('none'))
           ),
-        ]),
-      ),
-    ),
+        ])
+      )
+    )
   )
 }
 
@@ -52,8 +52,8 @@ export function handleOnDirective(path, name, value) {
   path.replaceWith(
     t.jSXAttribute(
       t.jSXIdentifier(eventName),
-      t.jSXExpressionContainer(t.memberExpression(t.thisExpression(), t.identifier(value))),
-    ),
+      t.jSXExpressionContainer(t.memberExpression(t.thisExpression(), t.identifier(value)))
+    )
   )
 }
 
@@ -66,9 +66,9 @@ export function handleBindDirective(path, name, value, state) {
     t.jSXAttribute(
       t.jSXIdentifier(name),
       t.jSXExpressionContainer(
-        t.memberExpression(t.memberExpression(t.thisExpression(), getIdentifier(state, value)), t.identifier(value)),
-      ),
-    ),
+        t.memberExpression(t.memberExpression(t.thisExpression(), getIdentifier(state, value)), t.identifier(value))
+      )
+    )
   )
 }
 
@@ -106,13 +106,13 @@ export function handleForDirective(path, value, definedInFor, state) {
                   t.jSXAttribute(t.jSXIdentifier('key'), t.jSXExpressionContainer(t.identifier('index'))),
                 ]),
                 t.jSXClosingElement(t.jSXIdentifier(element)),
-                childs,
-              ),
+                childs
+              )
             ),
-          ]),
+          ])
         ),
-      ]),
-    ),
+      ])
+    )
   )
 }
 
@@ -125,8 +125,8 @@ export function handleTextDirective(path, value, state) {
         t.callExpression(t.memberExpression(t.identifier(value), t.identifier('replace')), [
           t.regExpLiteral('<[^>]+>', 'g'),
           t.stringLiteral(''),
-        ]),
-      ),
+        ])
+      )
     )
     return
   }
@@ -136,11 +136,11 @@ export function handleTextDirective(path, value, state) {
       t.callExpression(
         t.memberExpression(
           t.memberExpression(t.memberExpression(t.thisExpression(), getIdentifier(state, value)), t.identifier(value)),
-          t.identifier('replace'),
+          t.identifier('replace')
         ),
-        [t.regExpLiteral('<[^>]+>', 'g'), t.stringLiteral('')],
-      ),
-    ),
+        [t.regExpLiteral('<[^>]+>', 'g'), t.stringLiteral('')]
+      )
+    )
   )
 }
 
@@ -152,7 +152,7 @@ export function handleHTMLDirective(path, value, state) {
   path.replaceWith(
     t.jSXAttribute(
       t.jSXIdentifier('dangerouslySetInnerHTML'),
-      t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), val)])),
-    ),
+      t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), val)]))
+    )
   )
 }

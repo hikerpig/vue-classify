@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs'
 import * as format from 'prettier-eslint'
 
 function output(code, dist) {
@@ -38,10 +38,7 @@ function output(code, dist) {
         'key-spacing': [2, { afterColon: true }],
         'block-spacing': [2, 'always'],
         'space-before-function-paren': [2, 'always'],
-        'padding-line-between-statements': [
-          2,
-          { blankLine: 'always', prev: 'import', next: 'export' },
-        ],
+        'padding-line-between-statements': [2, { blankLine: 'always', prev: 'import', next: 'export' }],
         'lines-around-comment': [2, { beforeLineComment: true }],
         'no-console': 0,
         'no-empty': 0,
@@ -50,10 +47,10 @@ function output(code, dist) {
         'no-trailing-spaces': 0,
       },
     },
-  };
+  }
 
   const formatCode = format(opts)
   fs.writeFileSync(dist, formatCode)
 }
 
-export default output;
+export default output

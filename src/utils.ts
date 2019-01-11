@@ -53,7 +53,7 @@ export function genPropTypes(props) {
         val = obj.required
           ? t.memberExpression(
               t.memberExpression(t.identifier('PropTypes'), t.identifier('array')),
-              t.identifier('isRequired'),
+              t.identifier('isRequired')
             )
           : t.memberExpression(t.identifier('PropTypes'), t.identifier('array'))
       }
@@ -70,7 +70,7 @@ export function genPropTypes(props) {
       val = obj.required
         ? t.memberExpression(
             t.memberExpression(t.identifier('PropTypes'), t.identifier(obj.type)),
-            t.identifier('isRequired'),
+            t.identifier('isRequired')
           )
         : t.memberExpression(t.identifier('PropTypes'), t.identifier(obj.type))
     }
