@@ -1,0 +1,76 @@
+#! /usr/bin/env node
+
+const program = require('commander');
+const chalk = require('chalk');
+const path = require('path');
+const fs = require('fs');
+
+const transform = require('../lib/index').default
+const {
+  log
+} = require('../lib/utils');
+const pkg = require('../package.json');
+
+process.on('exit', () => console.log());
+
+program
+  .version(pkg.version)
+  .usage('[options]')
+  .option('-i, --input', 'the input path for vue component')
+  .option('-o, --output', 'the output path for new component, which default value is process.cwd()')
+  .option('-n, --name', 'the output file name, which default value is "classified.js"')
+  .parse(process.argv);
+
+program.on('--help', function () {
+  console.log();
+  console.log('  Examples:');
+  console.log();
+  console.log(chalk.gray('    # transform a vue option-object style component to class component.'));
+  console.log();
+  console.log('    $ vue-classify -i ./components/option-object.js -o ./components/ -n component');
+  console.log();
+});
+
+function help() {
+  if (program.args.length < 1) {
+    return program.help();
+  }
+}
+
+help();
+
+let src = program.args[0];
+let dist = program.args[1] ? program.args[1] : process.cwd();
+let name = program.args[2] ? program.args[2] : 'classified.js';
+
+src = path.resolve(process.cwd(), src);
+dist = path.resolve(process.cwd(), dist);
+
+if (!/(\.js|\.vue)$/.test(src)) {
+  log(`Not support the file format: ${src}`);
+  process.exit();
+}
+
+if (!fs.existsSync(src)) {
+  log(`The source file dose not exist: ${src}`);
+  process.exit();
+}
+
+if (!fs.statSync(src).isFile()) {
+  log(`The source file is not a file: ${src}`);
+  process.exit();
+}
+
+if (!fs.existsSync(dist)) {
+  log(`The dist directory path dose not exist: ${dist}`);
+  process.exit();
+}
+
+if (!/\.js$/.test(name)) {
+  name += '.js';
+}
+
+const isSFC = /\.vue$/.test(src);
+const targetPath = path.resolve(process.cwd(), path.join(dist, name));
+
+transform(src, targetPath, isSFC);
