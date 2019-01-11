@@ -2,7 +2,7 @@ import * as t from 'babel-types'
 import chalk from 'chalk'
 
 export function parseName(name) {
-  name = name || 'my-react-compoennt'
+  name = name || 'my-vue-compoennt'
   const val = name.toLowerCase().split('-')
   let str = ''
   val.forEach(v => {

@@ -1,5 +1,5 @@
 import generate from 'babel-generator'
-import babelTraverse from 'babel-traverse'
+import babelTraverse, { NodePath } from 'babel-traverse'
 import * as t from 'babel-types'
 import * as babelParser from '@babel/parser'
 import * as fs from 'fs'
@@ -67,11 +67,11 @@ export default function transform(src, targetPath, isSFC) {
   initComponents(vast, state) // SFC
 
   babelTraverse(vast, {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       collect.imports.push(path.node)
     },
 
-    ObjectMethod(path) {
+    ObjectMethod(path: NodePath) {
       const name = path.node.key.name
       if (path.parentPath.parent.key && path.parentPath.parent.key.name === 'methods') {
         handleGeneralMethods(path, collect, state, name)
@@ -93,12 +93,12 @@ export default function transform(src, targetPath, isSFC) {
   }
 
   // AST for react component
-  const tpl = `export default class ${parseName(state.name)} extends Component {}`
-  const rast = babelParser.parse(tpl, {
+  const tpl = `export default class ${parseName(state.name)} extends Vue {}`
+  const newAst = babelParser.parse(tpl, {
     sourceType: 'module',
   })
 
-  babelTraverse(rast, {
+  babelTraverse(newAst, {
     Program(path) {
       genImports(path, collect, state)
     },
@@ -107,17 +107,19 @@ export default function transform(src, targetPath, isSFC) {
       genStaticProps(path, state)
       genClassMethods(path, collect)
       // genProps(path, state);
-      isSFC && genSFCRenderMethod(path, state, renderArgument)
+      if (isSFC) {
+        genSFCRenderMethod(path, state, renderArgument)
+      }
     },
   })
 
   if (isSFC) {
     // replace custom element/component
-    babelTraverse(rast, {
+    babelTraverse(newAst, {
       ClassMethod(path) {
         if (path.node.key.name === 'render') {
           path.traverse({
-            JSXIdentifier(path) {
+            JSXIdentifier(path: NodePath) {
               if (t.isJSXClosingElement(path.parent) || t.isJSXOpeningElement(path.parent)) {
                 const node = path.node
                 const componentName = state.components[node.name] || state.components[parseComponentName(node.name)]
@@ -133,7 +135,7 @@ export default function transform(src, targetPath, isSFC) {
     })
   }
 
-  const { code } = generate(rast, {
+  const { code } = generate(newAst, {
     quotes: 'single',
     retainLines: true,
   })

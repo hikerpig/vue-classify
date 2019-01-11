@@ -69,7 +69,7 @@ export default function traverseTemplate(template, state) {
       const name = expression.name
 
       if (t.isBinaryExpression(expression)) {
-        log('[vue-to-react]: Maybe you are using filter expression, but vtr is not supports it.')
+        log('[vue-classify]: Maybe you are using filter expression, but vtr is not supports it.')
         return
       }
 
