@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "scripthost",
+      "esnext"
+    ],
+    "target": "es2015",
+    "strict": false,
+    "strictPropertyInitialization": false,
+    "outDir": "./lib",
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "inlineSourceMap": false,
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*-spec.ts"
+  ]
+}
