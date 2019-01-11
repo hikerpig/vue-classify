@@ -1,11 +1,45 @@
 import * as t from 'babel-types'
-import chalk from 'chalk'
-import { genDefaultProps, genPropTypes } from './utils'
+
+const TYPE_KEYWORD_CTOR_MAP = {
+  boolean: t.TSBooleanKeyword,
+  number: t.TSNumberKeyword,
+  string: t.TSStringKeyword,
+}
 
 function genPropDecorators(props) {
-  const properties = []
   const keys = Object.keys(props)
   const nodes = []
+
+  for (let i = 0, l = keys.length; i < l; i++) {
+    const key = keys[i]
+    const obj = props[key]
+    // console.log('key', key, obj)
+
+    const properties = []
+    if (obj.required) {
+      properties.push(t.objectProperty(t.identifier('required'), t.booleanLiteral(true)))
+    }
+    if (obj.validator) {
+      const node = t.callExpression(t.memberExpression(t.identifier('PropTypes'), t.identifier('oneOf')), [
+        t.arrayExpression(obj.validator.elements),
+      ])
+      properties.push(node)
+    }
+    const decoratorParam = properties.length ? t.objectExpression(properties): null
+
+    const decorator = t.decorator(t.callExpression(t.identifier('Prop'), decoratorParam ? [decoratorParam]: []))
+
+    let typeAnnotation: t.TSTypeAnnotation
+    if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
+      typeAnnotation = t.TSTypeAnnotation(TYPE_KEYWORD_CTOR_MAP[obj.type]())
+    }
+
+    if (typeAnnotation && decorator) {
+      const property = t.classProperty(t.identifier(key), null, typeAnnotation as any, [decorator])
+      nodes.push(property)
+    }
+  }
+
   return nodes
 }
 
@@ -26,15 +60,6 @@ export function genImports(path, collect, state) {
   collect.imports.push(importVueClassComponent)
   collect.imports.push(importVue)
   collect.imports.forEach(node => nodeLists.unshift(node))
-}
-
-export function genStaticProps(path, state) {
-  const props = state.props
-  const nodeLists = path.node.body
-  if (Object.keys(props).length) {
-    nodeLists.push(genPropTypes(props))
-    nodeLists.push(genDefaultProps(props))
-  }
 }
 
 export const genProps = (path, state) => {

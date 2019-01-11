@@ -3,6 +3,9 @@
     "tslint:latest",
     "tslint-config-prettier"
   ],
+  "linterOptions": {
+    "exclude": ["node_modules"]
+  },
   "rules": {
     "member-access": false,
     "max-classes-per-file": false,

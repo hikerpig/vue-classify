@@ -7,7 +7,7 @@ import { parseComponent } from 'vue-template-compiler'
 import { initComponents, initComputed, initData, initProps } from './collect-state'
 import { log, parseComponentName, parseName } from './utils'
 
-import { genClassMethods, genImports, genProps, genStaticProps } from './tsvue-ast-helpers'
+import { genClassMethods, genImports, genProps } from './tsvue-ast-helpers'
 
 import output from './output'
 import traverseTemplate from './sfc/index'
@@ -104,9 +104,8 @@ export default function transform(src, targetPath, isSFC) {
     },
 
     ClassBody(path) {
-      genStaticProps(path, state)
+      genProps(path, state)
       genClassMethods(path, collect)
-      // genProps(path, state);
       if (isSFC) {
         genSFCRenderMethod(path, state, renderArgument)
       }
