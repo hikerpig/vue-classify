@@ -1,8 +1,8 @@
 import * as t from 'babel-types'
 import { CollectState } from './index'
-import { NodePath } from 'babel-traverse';
+import { NodePath } from 'babel-traverse'
 
-type DictOf<T> = {[key: string]: T}
+type DictOf<T> = { [key: string]: T }
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.TSBooleanKeyword,
@@ -121,5 +121,24 @@ export function genComputeds(path, state: CollectState) {
   const computedNodes = processComputeds(computeds)
   computedNodes.forEach(node => {
     nodeLists.push(node)
+  })
+}
+
+export function genDatas(path, state: CollectState) {
+  const nodeLists = path.node.body
+  const { data } = state
+  Object.keys(data).forEach((key) => {
+    if (key === '_statements') {
+      return
+    }
+    const dataNodePath = data[key]
+    let property: t.ClassProperty
+    if (t.isMemberExpression(dataNodePath)) {
+      property = t.classProperty(t.identifier(key), dataNodePath)
+    }
+
+    if (property) {
+      nodeLists.push(property)
+    }
   })
 }

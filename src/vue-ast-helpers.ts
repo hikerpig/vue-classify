@@ -15,14 +15,6 @@ const nestedMethodsVisitor = {
 
   ExpressionStatement(path) {
     const expression = path.node.expression
-    if (t.isAssignmentExpression(expression)) {
-      const right = expression.right
-      const letfNode = expression.left.property
-      path.node.expression = t.callExpression(t.memberExpression(t.thisExpression(), t.identifier('setState')), [
-        t.objectExpression([t.objectProperty(letfNode, right)]),
-      ])
-    }
-
     if (t.isCallExpression(expression) && !t.isThisExpression(expression.callee.object)) {
       path.traverse(
         {

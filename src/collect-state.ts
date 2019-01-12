@@ -3,6 +3,7 @@ import * as t from 'babel-types'
 import { log } from './utils'
 import collectVueProps from './vue-props'
 import collectVueComputed from './vue-computed'
+import { CollectState } from './index'
 
 /**
  * Collect vue component state(data prop, props prop & computed prop)
@@ -48,7 +49,7 @@ export function initProps(ast, state) {
   })
 }
 
-export function initData(ast, state: any) {
+export function initData(ast, state: CollectState) {
   babelTraverse(ast, {
     ObjectMethod(path) {
       const parent = path.parentPath.parent
@@ -57,7 +58,7 @@ export function initData(ast, state: any) {
       if (parent && t.isExportDefaultDeclaration(parent)) {
         if (name === 'data') {
           const body = path.node.body.body
-          state.data._statements = [].concat(body)
+          state.dataStatements = [].concat(body)
 
           let propNodes = {}
           body.forEach(node => {
