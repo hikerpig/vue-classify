@@ -6,6 +6,11 @@ const TYPE_KEYWORD_CTOR_MAP = {
   string: t.TSStringKeyword,
 }
 
+function genTypeKeyword(typeStr: string) {
+  const ctor = TYPE_KEYWORD_CTOR_MAP[typeStr] || t.TSAnyKeyword
+  return ctor()
+}
+
 function genPropDecorators(props) {
   const keys = Object.keys(props)
   const nodes = []
@@ -25,13 +30,23 @@ function genPropDecorators(props) {
       ])
       properties.push(node)
     }
-    const decoratorParam = properties.length ? t.objectExpression(properties): null
+    const decoratorParam = properties.length ? t.objectExpression(properties) : null
 
-    const decorator = t.decorator(t.callExpression(t.identifier('Prop'), decoratorParam ? [decoratorParam]: []))
+    const decorator = t.decorator(t.callExpression(t.identifier('Prop'), decoratorParam ? [decoratorParam] : []))
 
     let typeAnnotation: t.TSTypeAnnotation
-    if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
-      typeAnnotation = t.TSTypeAnnotation(TYPE_KEYWORD_CTOR_MAP[obj.type]())
+
+    if (obj.type === 'typesOfArray') {
+      const typeKeywords: t.TypeAnnotation[] = obj.value.map((typeStr: string) => {
+        return genTypeKeyword(typeStr)
+      })
+      const typeRef = t.TSTypeReference(
+        t.identifier('Array'),
+        t.typeParameterInstantiation([t.unionTypeAnnotation(typeKeywords)])
+      )
+      typeAnnotation = t.TSTypeAnnotation(typeRef)
+    } else if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
+      typeAnnotation = t.TSTypeAnnotation(genTypeKeyword(obj.type))
     }
 
     if (typeAnnotation && decorator) {
