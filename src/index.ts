@@ -7,14 +7,22 @@ import { parseComponent } from 'vue-template-compiler'
 import { initComponents, initComputed, initData, initProps } from './collect-state'
 import { log, parseComponentName, parseName } from './utils'
 
-import { genClassMethods, genImports, genProps } from './tsvue-ast-helpers'
+import { genClassMethods, genImports, genProps, genComputeds } from './tsvue-ast-helpers'
 
 import output from './output'
 import traverseTemplate from './sfc/index'
 import { genSFCRenderMethod } from './sfc/sfc-ast-helpers'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
 
-const state = {
+export type CollectState = {
+  name: string | void
+  data: any
+  props: any
+  computeds: any
+  components: any
+}
+
+const state: CollectState = {
   name: undefined,
   data: {},
   props: {},
@@ -106,6 +114,7 @@ export default function transform(src, targetPath, isSFC) {
     ClassBody(path) {
       genProps(path, state)
       genClassMethods(path, collect)
+      genComputeds(path, state)
       if (isSFC) {
         genSFCRenderMethod(path, state, renderArgument)
       }

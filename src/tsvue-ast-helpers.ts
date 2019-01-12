@@ -1,4 +1,8 @@
 import * as t from 'babel-types'
+import { CollectState } from './index'
+import { NodePath } from 'babel-traverse';
+
+type DictOf<T> = {[key: string]: T}
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.TSBooleanKeyword,
@@ -58,6 +62,19 @@ function genPropDecorators(props) {
   return nodes
 }
 
+function processComputeds(computeds: DictOf<NodePath>) {
+  const nodes = []
+  // console.log('processComputeds', computeds)
+  Object.keys(computeds).forEach(key => {
+    const nodePath = computeds[key]
+    if (nodePath.isObjectMethod()) {
+      const classMethod = t.classMethod('get', t.identifier(key), [], nodePath.node.body)
+      nodes.push(classMethod)
+    }
+  })
+  return nodes
+}
+
 export function genImports(path, collect, state) {
   const nodeLists = path.node.body
   const importVue = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Vue'))], t.stringLiteral('vue'))
@@ -96,4 +113,13 @@ export function genClassMethods(path, collect) {
       nodeLists.push(methods[key])
     })
   }
+}
+
+export function genComputeds(path, state: CollectState) {
+  const nodeLists = path.node.body
+  const { computeds } = state
+  const computedNodes = processComputeds(computeds)
+  computedNodes.forEach(node => {
+    nodeLists.push(node)
+  })
 }
