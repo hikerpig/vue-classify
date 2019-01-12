@@ -1,8 +1,7 @@
 import * as t from '@babel/types'
-import { CollectState, CollectComputeds } from './index'
+import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
-
-type DictOf<T> = { [key: string]: T }
+import { DictOf } from './type'
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -15,7 +14,7 @@ function genTypeKeyword(typeStr: string) {
   return ctor()
 }
 
-function genPropDecorators(props) {
+function genPropDecorators(props: CollectProps) {
   const keys = Object.keys(props)
   const nodes = []
 
@@ -24,15 +23,24 @@ function genPropDecorators(props) {
     const obj = props[key]
     // console.log('key', key, obj)
 
-    const properties = []
+    const properties: Array<t.ObjectProperty | t.ObjectMethod> = []
     if (obj.required) {
       properties.push(t.objectProperty(t.identifier('required'), t.booleanLiteral(true)))
     }
     if (obj.validator) {
-      const node = t.callExpression(t.memberExpression(t.identifier('PropTypes'), t.identifier('oneOf')), [
-        t.arrayExpression(obj.validator.elements),
-      ])
-      properties.push(node)
+      const { validator } = obj
+      if (validator) {
+        if (t.isFunctionExpression(validator)) {
+          properties.push(t.objectMethod('method', t.identifier('validator'), validator.params, validator.body))
+        } else if (t.isObjectMethod(obj.validator)) {
+          properties.push(obj.validator)
+        }
+      }
+    }
+    if (obj.default) {
+      if (t.isObjectMethod(obj.default)) {
+        properties.push(obj.default)
+      }
     }
     const decoratorParam = properties.length ? t.objectExpression(properties) : null
 
@@ -51,6 +59,8 @@ function genPropDecorators(props) {
       typeAnnotation = t.tsTypeAnnotation(typeRef)
     } else if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
       typeAnnotation = t.tsTypeAnnotation(genTypeKeyword(obj.type))
+    } else {
+      typeAnnotation = t.tsTypeAnnotation(t.tsAnyKeyword())
     }
 
     if (typeAnnotation && decorator) {
@@ -128,7 +138,7 @@ export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state:
   }
 }
 
-export const genProps = (path, state) => {
+export const genProps = (path, state: CollectState) => {
   const props = state.props
   const nodeLists = path.node.body
   if (Object.keys(props).length) {

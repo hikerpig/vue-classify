@@ -8,6 +8,8 @@ const nestedPropsVisitor = {
     if (parentKey && parentKey.name === this.childKey) {
       const key = path.node.key
       const node = path.node.value
+      // console.log('key node', key, node)
+      const stateProp = this.state.props[this.childKey]
 
       if (key.name === 'type') {
         if (t.isIdentifier(node)) {
@@ -32,6 +34,18 @@ const nestedPropsVisitor = {
         }
       }
 
+      if (key.name === 'default') {
+        if (t.isFunctionExpression(node)) {
+          stateProp.default = node
+        }
+      }
+
+      if (key.name === 'validator') {
+        if (t.isFunctionExpression(node)) {
+          stateProp.validator = node
+        }
+      }
+
       if (t.isLiteral(node)) {
         if (key.name === 'default') {
           if (this.state.props[this.childKey].type === 'typesOfArray') {
@@ -44,6 +58,16 @@ const nestedPropsVisitor = {
         if (key.name === 'required') {
           this.state.props[this.childKey].required = node.value
         }
+      }
+    }
+  },
+
+  ObjectMethod(path) {
+    const nodeKeyName = path.node.key.name
+    if (nodeKeyName === 'default') {
+      const stateProp = this.state.props[this.childKey]
+      if (stateProp && !stateProp.default) {
+        stateProp.default = path.node
       }
     }
   },

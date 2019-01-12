@@ -2,8 +2,8 @@ import generate from '@babel/generator'
 import babelTraverse from '@babel/traverse'
 import * as t from '@babel/types'
 import * as babelParser from '@babel/parser'
-import * as fs from 'fs'
 import { parseComponent } from 'vue-template-compiler'
+import { NodePath } from 'babel-traverse'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
 import { log, parseComponentName, parseName } from './utils'
 
@@ -19,10 +19,22 @@ import {
 
 import output from './output'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
-import { NodePath } from 'babel-traverse'
+import { DictOf, OrNull } from './type'
 
 export type CollectStateDatas = {
   [key: string]: NodePath[]
+}
+
+type CollectPropObjectMethod = NodePath<t.ObjectMethod | t.FunctionExpression>
+
+export type CollectProps = {
+  // [key: string]: NodePath<t.ObjectMethod | t.ObjectProperty>
+  [key: string]: DictOf<{
+    type: string
+    value: any
+    validator?: OrNull<CollectPropObjectMethod>
+    default?: OrNull<CollectPropObjectMethod>
+  }>
 }
 
 export type CollectComputeds = {
@@ -37,7 +49,7 @@ export type CollectState = {
   name: string | void
   data: CollectStateDatas
   dataStatements: t.Statement[]
-  props: any
+  props: CollectProps
   computeds: CollectComputeds
   watches: CollectWatches
   components: any
