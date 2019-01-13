@@ -27,7 +27,8 @@ program.on('--help', function () {
   console.log();
   console.log(chalk.gray('    # transform a vue option-object style component to class component.'));
   console.log();
-  console.log('    $ vue-classify -i ./components/option-object.js -o ./components/ -n component');
+  console.log('    $ vue-classify -i ./components/option-object.js -o ./components/ -n Component');
+  console.log('    $ vue-classify ./components/option-object.js ./components/Component.ts')
   console.log();
 });
 
@@ -40,8 +41,8 @@ function help() {
 help();
 
 let src = program.args[0];
-let dist = program.args[1] ? program.args[1] : process.cwd();
-let name = program.args[2] ? program.args[2] : 'classified';
+let name = program.args[1] ? program.args[1] : 'classified';
+let dist = program.output ? program.output: process.cwd()
 
 src = path.resolve(process.cwd(), src);
 dist = path.resolve(process.cwd(), dist);
@@ -66,9 +67,12 @@ if (!fs.existsSync(dist)) {
   process.exit();
 }
 
+const inputExt = path.extname(name)
 const isSFC = /\.vue$/.test(src);
 if (isSFC) {
-  name += '.vue'
+  if (inputExt !== '.vue') {
+    name += '.vue'
+  }
 } else if (!/\.js$/.test(name)) {
   name += '.ts';
 }

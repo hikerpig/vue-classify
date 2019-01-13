@@ -13,12 +13,13 @@ Options:
   -V, --version  output the version number
   -i, --input    the input path for vue component
   -o, --output   the output path for new component, which default value is process.cwd()
-  -n, --name     the output file name, which default value is "classified.js"
+  -n, --name     the output file name, which default value is "classified.ts"
   -h, --help     output usage information
 
   Examples:
 
     # transform a vue option-object style component to class component.
 
-    $ vue-classify -i ./components/option-object.js -o ./components/ -n component
+    $ vue-classify -i ./components/option-object.js -o ./components/ -n Component
+    $ vue-classify ./components/option-object.js ./components/Component.ts
 ```
