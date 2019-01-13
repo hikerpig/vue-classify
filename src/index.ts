@@ -52,14 +52,10 @@ const LIFECYCLE_HOOKS = [
   'activated',
   'deactivated',
   'errorCaptured',
-  'ssrPrefetch'
+  'ssrPrefetch',
 ]
 
-const VUE_ROUTER_HOOKS = [
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate',
-]
+const VUE_ROUTER_HOOKS = ['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUpdate']
 
 const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
@@ -83,8 +79,7 @@ function formatContent(source, isSFC) {
   }
 }
 
-export default function transform(src, targetPath, isSFC) {
-  const source = fs.readFileSync(src)
+export default function transform(source, isSFC) {
   const component = formatContent(source.toString(), isSFC)
 
   const vast = babelParser.parse(component.js, {
@@ -149,12 +144,10 @@ export default function transform(src, targetPath, isSFC) {
   })
   const scriptCode = r.code
 
-  output({
+  const code = output({
     scriptCode,
     isSFC,
     templateCode: component.template,
-    dist: targetPath,
   })
-
-  log('Transform success', 'success')
+  return code
 }

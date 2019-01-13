@@ -4,6 +4,9 @@ import * as format from 'prettier-eslint'
 export function formatScriptCode(code) {
   const opts = {
     text: code,
+    prettierOptions: {
+      parser: 'babylon'
+    },
     eslintConfig: {
       parserOptions: {
         ecmaVersion: 7,
@@ -52,8 +55,8 @@ export function formatScriptCode(code) {
   return format(opts)
 }
 
-function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean; dist: string }) {
-  const { scriptCode, templateCode, isSFC, dist } = opts
+function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean;}) {
+  const { scriptCode, templateCode, isSFC } = opts
   const formattedCode = formatScriptCode(scriptCode)
 
   let code: string
@@ -62,7 +65,7 @@ function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean
   } else {
     code = formattedCode
   }
-  fs.writeFileSync(dist, code)
+  return code
 }
 
 export default output
