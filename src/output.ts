@@ -5,7 +5,7 @@ export function formatScriptCode(code) {
   const opts = {
     text: code,
     prettierOptions: {
-      parser: 'babylon'
+      parser: 'babylon',
     },
     eslintConfig: {
       parserOptions: {
@@ -55,7 +55,7 @@ export function formatScriptCode(code) {
   return format(opts)
 }
 
-function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean;}) {
+function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean }) {
   const { scriptCode, templateCode, isSFC } = opts
   const formattedCode = formatScriptCode(scriptCode)
 
