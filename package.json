@@ -21,7 +21,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "bin": {
-    "vtr": "bin/vue-classify"
+    "vue-classify": "bin/vue-classify"
   },
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",

@@ -41,7 +41,7 @@ help();
 
 let src = program.args[0];
 let dist = program.args[1] ? program.args[1] : process.cwd();
-let name = program.args[2] ? program.args[2] : 'classified.js';
+let name = program.args[2] ? program.args[2] : 'classified';
 
 src = path.resolve(process.cwd(), src);
 dist = path.resolve(process.cwd(), dist);
