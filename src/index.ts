@@ -105,10 +105,14 @@ export default function transform(src, targetPath, isSFC) {
 
     ObjectMethod(path: NodePath) {
       const name = path.node.key.name
-      if (path.parentPath.parent.key && ['methods', 'watch'].includes(path.parentPath.parent.key.name)) {
+      const grandParentKey = path.parentPath.parent.key
+      const gpkName = grandParentKey && grandParentKey.name
+      if (gpkName === 'methods') {
         handleGeneralMethods(path, collect, state, name)
       } else if (VUE_ECO_HOOKS.includes(name)) {
         handleCycleMethods(path, collect, state, name, isSFC)
+      } else if (gpkName === 'watch') {
+        // will collect in somewhere else
       } else {
         if (name === 'data' || state.computeds[name]) {
           return
