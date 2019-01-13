@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as format from 'prettier-eslint'
 
-function output(code, dist) {
+export function formatScriptCode(code) {
   const opts = {
     text: code,
     eslintConfig: {
@@ -49,8 +49,33 @@ function output(code, dist) {
     },
   }
 
-  const formatCode = format(opts)
-  fs.writeFileSync(dist, formatCode)
+  return format(opts)
+}
+
+function output(opts: {
+  scriptCode: string
+  templateCode: string
+  isSFC: boolean
+  dist: string
+}) {
+  const { scriptCode, templateCode, isSFC, dist } = opts
+  const formattedCode = formatScriptCode(scriptCode)
+
+  let code: string
+  if (isSFC) {
+    code = [
+      '<template>',
+      templateCode,
+      '</template>',
+      '',
+      '<script lang="ts">',
+      formattedCode,
+      '</script>',
+    ].join('\n')
+  } else {
+    code = formattedCode
+  }
+  fs.writeFileSync(dist, code)
 }
 
 export default output

@@ -18,7 +18,7 @@ program
   .usage('[options]')
   .option('-i, --input', 'the input path for vue component')
   .option('-o, --output', 'the output path for new component, which default value is process.cwd()')
-  .option('-n, --name', 'the output file name, which default value is "classified.js"')
+  .option('-n, --name', 'the output file name, which default value is "classified.ts"')
   .parse(process.argv);
 
 program.on('--help', function () {
@@ -66,11 +66,13 @@ if (!fs.existsSync(dist)) {
   process.exit();
 }
 
-if (!/\.js$/.test(name)) {
-  name += '.js';
+const isSFC = /\.vue$/.test(src);
+if (isSFC) {
+  name += '.vue'
+} else if (!/\.js$/.test(name)) {
+  name += '.ts';
 }
 
-const isSFC = /\.vue$/.test(src);
 const targetPath = path.resolve(process.cwd(), path.join(dist, name));
 
 transform(src, targetPath, isSFC);

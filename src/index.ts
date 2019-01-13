@@ -10,8 +10,6 @@ import { log, parseComponentName, parseName } from './utils'
 import { genClassMethods, genImports, genProps, genComputeds, genDatas } from './tsvue-ast-helpers'
 
 import output from './output'
-import traverseTemplate from './sfc/index'
-import { genSFCRenderMethod } from './sfc/sfc-ast-helpers'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
 
 export type CollectStateDatas = {
@@ -100,19 +98,14 @@ export default function transform(src, targetPath, isSFC) {
     },
   })
 
-  let renderArgument = null
-  if (isSFC) {
-    // traverse template in sfc
-    renderArgument = traverseTemplate(component.template, state)
-  }
-
   // AST for react component
-  const tpl = `export default class ${parseName(state.name)} extends Vue {}`
-  const newAst = babelParser.parse(tpl, {
+  const scriptTpl = `export default class ${parseName(state.name)} extends Vue {}`
+  const scriptAst = babelParser.parse(scriptTpl, {
     sourceType: 'module',
+    plugins: isSFC ? [] : ['jsx'],
   })
 
-  babelTraverse(newAst, {
+  babelTraverse(scriptAst, {
     Program(path) {
       genImports(path, collect, state)
     },
@@ -122,39 +115,22 @@ export default function transform(src, targetPath, isSFC) {
       genDatas(path, state)
       genComputeds(path, state)
       genClassMethods(path, collect)
-      if (isSFC) {
-        genSFCRenderMethod(path, state, renderArgument)
-      }
     },
   })
 
-  if (isSFC) {
-    // replace custom element/component
-    babelTraverse(newAst, {
-      ClassMethod(path) {
-        if (path.node.key.name === 'render') {
-          path.traverse({
-            JSXIdentifier(path: NodePath) {
-              if (t.isJSXClosingElement(path.parent) || t.isJSXOpeningElement(path.parent)) {
-                const node = path.node
-                const componentName = state.components[node.name] || state.components[parseComponentName(node.name)]
-                if (componentName) {
-                  path.replaceWith(t.jSXIdentifier(componentName))
-                  path.stop()
-                }
-              }
-            },
-          })
-        }
-      },
-    })
-  }
 
-  const { code } = generate(newAst, {
+  const r = generate(scriptAst, {
     quotes: 'single',
     retainLines: true,
   })
+  const scriptCode = r.code
 
-  output(code, targetPath)
-  log('Transform successed!!!', 'success')
+  output({
+    scriptCode,
+    isSFC,
+    templateCode: component.template,
+    dist: targetPath
+  })
+
+  log('Transform success', 'success')
 }
