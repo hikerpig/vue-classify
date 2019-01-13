@@ -4,10 +4,10 @@ import * as t from '@babel/types'
 import * as babelParser from '@babel/parser'
 import * as fs from 'fs'
 import { parseComponent } from 'vue-template-compiler'
-import { initComponents, initComputed, initData, initProps } from './collect-state'
+import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
 import { log, parseComponentName, parseName } from './utils'
 
-import { genClassMethods, genImports, genProps, genComputeds, genDatas } from './tsvue-ast-helpers'
+import { genClassMethods, genImports, genProps, genComputeds, genDatas, genWatches } from './tsvue-ast-helpers'
 
 import output from './output'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
@@ -16,12 +16,18 @@ export type CollectStateDatas = {
   [key: string]: NodePath[]
 }
 
+export type CollectWatches = {
+  // [key: string]: NodePath[]
+  [key: string]: Array<t.ObjectMethod | t.ObjectProperty>
+}
+
 export type CollectState = {
   name: string | void
   data: CollectStateDatas
   dataStatements: t.Statement[]
   props: any
   computeds: any
+  watches: CollectWatches
   components: any
 }
 
@@ -31,6 +37,7 @@ const state: CollectState = {
   dataStatements: [],
   props: {},
   computeds: {},
+  watches: {},
   components: {},
 }
 
@@ -76,6 +83,7 @@ export default function transform(src, targetPath, isSFC) {
   initProps(vast, state)
   initData(vast, state)
   initComputed(vast, state)
+  initWatch(vast, state)
   initComponents(vast, state) // SFC
 
   babelTraverse(vast, {
@@ -85,7 +93,7 @@ export default function transform(src, targetPath, isSFC) {
 
     ObjectMethod(path: NodePath) {
       const name = path.node.key.name
-      if (path.parentPath.parent.key && path.parentPath.parent.key.name === 'methods') {
+      if (path.parentPath.parent.key && ['methods', 'watch'].includes(path.parentPath.parent.key.name)) {
         handleGeneralMethods(path, collect, state, name)
       } else if (cycle[name]) {
         handleCycleMethods(path, collect, state, name, cycle[name], isSFC)
@@ -114,10 +122,10 @@ export default function transform(src, targetPath, isSFC) {
       genProps(path, state)
       genDatas(path, state)
       genComputeds(path, state)
+      genWatches(path, state)
       genClassMethods(path, collect)
     },
   })
-
 
   const r = generate(scriptAst, {
     quotes: 'single',
@@ -129,7 +137,7 @@ export default function transform(src, targetPath, isSFC) {
     scriptCode,
     isSFC,
     templateCode: component.template,
-    dist: targetPath
+    dist: targetPath,
   })
 
   log('Transform success', 'success')

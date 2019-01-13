@@ -38,7 +38,7 @@ function genPropDecorators(props) {
 
     const decorator = t.decorator(t.callExpression(t.identifier('Prop'), decoratorParam ? [decoratorParam] : []))
 
-    let typeAnnotation: t.tsTypeAnnotation
+    let typeAnnotation: t.TSTypeAnnotation
 
     if (obj.type === 'typesOfArray') {
       const typeKeywords: t.TSType[] = obj.value.map((typeStr: string) => {
@@ -75,20 +75,28 @@ function processComputeds(computeds: DictOf<NodePath>) {
   return nodes
 }
 
-export function genImports(path, collect, state) {
+export function genImports(path, collect, state: CollectState) {
   const nodeLists = path.node.body
   const importVue = t.importDeclaration([t.importDefaultSpecifier(t.identifier('Vue'))], t.stringLiteral('vue'))
   const importVueClassComponent = t.importDeclaration(
     [t.importDefaultSpecifier(t.identifier('Component'))],
     t.stringLiteral('vue-class-component')
   )
+  const propertyDecoratorSpecifiers = []
   if (Object.keys(state.props).length) {
-    const importPropTypes = t.importDeclaration(
-      [t.importSpecifier(t.identifier('Prop'), t.identifier('Prop'))],
+    propertyDecoratorSpecifiers.push(t.importSpecifier(t.identifier('Prop'), t.identifier('Prop')))
+  }
+  if (Object.keys(state.watches).length) {
+    propertyDecoratorSpecifiers.push(t.importSpecifier(t.identifier('Watch'), t.identifier('Watch')))
+  }
+  if (propertyDecoratorSpecifiers.length) {
+    const importD = t.importDeclaration(
+      propertyDecoratorSpecifiers,
       t.stringLiteral('vue-property-decorator')
     )
-    collect.imports.push(importPropTypes)
+    collect.imports.push(importD)
   }
+
   collect.imports.push(importVueClassComponent)
   collect.imports.push(importVue)
   collect.imports.forEach(node => nodeLists.unshift(node))
@@ -142,3 +150,36 @@ export function genDatas(path, state: CollectState) {
     }
   })
 }
+
+export function genWatches(path: NodePath, state: CollectState) {
+  const nodeLists = path.node.body
+  const { watches } = state
+  Object.keys(watches).forEach(key => {
+    const watchNodePath: NodePath = watches[key]
+    let cMethod: t.ClassMethod
+    let funcNode: t.ObjectMethod | t.FunctionExpression
+    const node = watchNodePath.node
+    if (t.isObjectMethod(node)) {
+      funcNode = node
+    } else if (t.isObjectProperty(node)) {
+      if (t.isFunctionExpression(node.value)) {
+        funcNode = node.value
+      }
+    }
+    if (funcNode) {
+      const methodName = `on${key[0].toUpperCase()}${key.slice(1)}Change`
+      const decorator = t.decorator(t.callExpression(t.identifier('Watch'), [t.stringLiteral(key)]))
+      const paramList = funcNode.params
+      const blockStatement = funcNode.body
+      cMethod = t.classMethod('method',
+        t.identifier(methodName),
+        paramList,
+        blockStatement,
+      )
+      cMethod.decorators = [ decorator ]
+
+      nodeLists.push(cMethod)
+    }
+  })
+}
+

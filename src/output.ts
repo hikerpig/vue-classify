@@ -52,26 +52,13 @@ export function formatScriptCode(code) {
   return format(opts)
 }
 
-function output(opts: {
-  scriptCode: string
-  templateCode: string
-  isSFC: boolean
-  dist: string
-}) {
+function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean; dist: string }) {
   const { scriptCode, templateCode, isSFC, dist } = opts
   const formattedCode = formatScriptCode(scriptCode)
 
   let code: string
   if (isSFC) {
-    code = [
-      '<template>',
-      templateCode,
-      '</template>',
-      '',
-      '<script lang="ts">',
-      formattedCode,
-      '</script>',
-    ].join('\n')
+    code = ['<template>', templateCode, '</template>', '', '<script lang="ts">', formattedCode, '</script>'].join('\n')
   } else {
     code = formattedCode
   }

@@ -1,14 +1,15 @@
+
+/**
+ * Collect vue component state(data, props, computed, watch)
+ */
 import babelTraverse from '@babel/traverse'
 import * as t from '@babel/types'
 import { log } from './utils'
 import collectVueProps from './vue-props'
 import collectVueComputed from './vue-computed'
+import collectVueWatch from './collectors/vue-watch'
 import { CollectState } from './index'
 
-/**
- * Collect vue component state(data prop, props prop & computed prop)
- * Don't support watch prop of vue component
- */
 export function initProps(ast, state) {
   babelTraverse(ast, {
     Program(path) {
@@ -85,6 +86,21 @@ export function initComputed(ast, state) {
       if (parent && t.isExportDefaultDeclaration(parent)) {
         if (name === 'computed') {
           collectVueComputed(path, state)
+          path.stop()
+        }
+      }
+    },
+  })
+}
+
+export function initWatch(ast, state: CollectState) {
+  babelTraverse(ast, {
+    ObjectProperty(path) {
+      const parent = path.parentPath.parent
+      const name = path.node.key.name
+      if (parent && t.isExportDefaultDeclaration(parent)) {
+        if (name === 'watch') {
+          collectVueWatch(path, state)
           path.stop()
         }
       }
