@@ -1,4 +1,4 @@
-import * as t from 'babel-types'
+import * as t from '@babel/types'
 import { log, getIdentifier } from './utils'
 
 const nestedMethodsVisitor = {

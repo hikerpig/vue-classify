@@ -1,4 +1,4 @@
-import * as t from 'babel-types'
+import * as t from '@babel/types'
 import { getNextJSXElment } from './sfc-ast-helpers'
 import { log, getIdentifier } from '../utils'
 import eventMap from './event-map'

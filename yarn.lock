@@ -2,12 +2,46 @@
 # yarn lockfile v1
 
 
-"@babel/code-frame@^7.0.0-beta.35":
+"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
   resolved "http://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
   integrity sha1-BuKrGb21NThVWaq7W6WXKUgoAPg=
   dependencies:
     "@babel/highlight" "^7.0.0"
+
+"@babel/generator@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.2.2.tgz#18c816c70962640eab42fe8cae5f3947a5c65ccc"
+  integrity sha512-I4o675J/iS8k+P38dvJ3IBGqObLXyQLTxtrR4u9cSUJOURvafeEWb/pFMOTwtNrmq73mJzyF6ueTbO1BtN0Zeg==
+  dependencies:
+    "@babel/types" "^7.2.2"
+    jsesc "^2.5.1"
+    lodash "^4.17.10"
+    source-map "^0.5.0"
+    trim-right "^1.0.1"
+
+"@babel/helper-function-name@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.npmjs.org/@babel/helper-function-name/-/helper-function-name-7.1.0.tgz#a0ceb01685f73355d4360c1247f582bfafc8ff53"
+  integrity sha512-A95XEoCpb3TO+KZzJ4S/5uW5fNe26DjBGqf1o9ucyLyCmi1dXq/B3c8iaWTfBk3VvetUxl16e8tIrd5teOCfGw==
+  dependencies:
+    "@babel/helper-get-function-arity" "^7.0.0"
+    "@babel/template" "^7.1.0"
+    "@babel/types" "^7.0.0"
+
+"@babel/helper-get-function-arity@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/@babel/helper-get-function-arity/-/helper-get-function-arity-7.0.0.tgz#83572d4320e2a4657263734113c42868b64e49c3"
+  integrity sha512-r2DbJeg4svYvt3HOS74U4eWKsUAMRH01Z1ds1zx8KNTPtpTL5JAsdFv8BNyOpVqdFhHkkRDIg5B4AsxmkjAlmQ==
+  dependencies:
+    "@babel/types" "^7.0.0"
+
+"@babel/helper-split-export-declaration@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/@babel/helper-split-export-declaration/-/helper-split-export-declaration-7.0.0.tgz#3aae285c0311c2ab095d997b8c9a94cad547d813"
+  integrity sha512-MXkOJqva62dfC0w85mEf/LucPPS/1+04nmmRMPEBUB++hiiThQ2zPtX/mEWQ3mtzCEjIJvPY8nuwxXtQeQwUag==
+  dependencies:
+    "@babel/types" "^7.0.0"
 
 "@babel/highlight@^7.0.0":
   version "7.0.0"
@@ -18,22 +52,43 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.2.3":
+"@babel/parser@^7.2.2", "@babel/parser@^7.2.3":
   version "7.2.3"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.2.3.tgz#32f5df65744b70888d17872ec106b02434ba1489"
   integrity sha512-0LyEcVlfCoFmci8mXx8A5oIkpkOgyo8dRHtxBnK9RRBwxO2+JZPNsqtVEZQ7mJFPxnXF9lfmU24mHOPI0qnlkA==
 
-"@types/babel-traverse@^6.25.4":
-  version "6.25.4"
-  resolved "https://registry.npmjs.org/@types/babel-traverse/-/babel-traverse-6.25.4.tgz#269af6a25c80419b635c8fa29ae42b0d5ce2418c"
-  integrity sha512-+/670NaZE7qPvdh8EtGds32/2uHFKE5JeS+7ePH6nGwF8Wj8r671/RkTiJQP2k22nFntWEb9xQ11MFj7xEqI0g==
+"@babel/template@^7.1.0":
+  version "7.2.2"
+  resolved "https://registry.npmjs.org/@babel/template/-/template-7.2.2.tgz#005b3fdf0ed96e88041330379e0da9a708eb2907"
+  integrity sha512-zRL0IMM02AUDwghf5LMSSDEz7sBCO2YnNmpg3uWTZj/v1rcG2BmQUvaGU8GhU8BvfMh1k2KIAYZ7Ji9KXPUg7g==
   dependencies:
-    "@types/babel-types" "*"
+    "@babel/code-frame" "^7.0.0"
+    "@babel/parser" "^7.2.2"
+    "@babel/types" "^7.2.2"
 
-"@types/babel-types@*":
-  version "7.0.4"
-  resolved "https://registry.npmjs.org/@types/babel-types/-/babel-types-7.0.4.tgz#bfd5b0d0d1ba13e351dff65b6e52783b816826c8"
-  integrity sha512-WiZhq3SVJHFRgRYLXvpf65XnV6ipVHhnNaNvE8yCimejrGglkg38kEj0JcizqwSHxmPSjcTlig/6JouxLGEhGw==
+"@babel/traverse@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.2.3.tgz#7ff50cefa9c7c0bd2d81231fdac122f3957748d8"
+  integrity sha512-Z31oUD/fJvEWVR0lNZtfgvVt512ForCTNKYcJBGbPb1QZfve4WGH8Wsy7+Mev33/45fhP/hwQtvgusNdcCMgSw==
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    "@babel/generator" "^7.2.2"
+    "@babel/helper-function-name" "^7.1.0"
+    "@babel/helper-split-export-declaration" "^7.0.0"
+    "@babel/parser" "^7.2.3"
+    "@babel/types" "^7.2.2"
+    debug "^4.1.0"
+    globals "^11.1.0"
+    lodash "^4.17.10"
+
+"@babel/types@^7.0.0", "@babel/types@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.npmjs.org/@babel/types/-/types-7.2.2.tgz#44e10fc24e33af524488b716cdaee5360ea8ed1e"
+  integrity sha512-fKCuD6UFUMkR541eDWL+2ih/xFZBXPOg/7EQFeTluMDebfqR4jrpaCjLhkWlQS4hT6nRa2PMEgXKbRB5/H2fpg==
+  dependencies:
+    esutils "^2.0.2"
+    lodash "^4.17.10"
+    to-fast-properties "^2.0.0"
 
 "@types/jest@^23.3.3":
   version "23.3.12"
@@ -273,15 +328,6 @@ aws4@^1.8.0:
   resolved "http://registry.npm.taobao.org/aws4/download/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha1-8OAD2cqef1nHpQiUXXsu+aBKVC8=
 
-babel-code-frame@7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-code-frame/-/babel-code-frame-7.0.0-beta.3.tgz#1614a91b2ba0e3848559f410bbacd030726899c9"
-  integrity sha512-flMsJ9eSpShupt2Gwpka84DoMePvE4HlDObzdEc+1iNkacv3+NHlsJ7dMKmbnVA/AT22UhcGEBHwbJLoXWBO6Q==
-  dependencies:
-    chalk "^2.0.0"
-    esutils "^2.0.2"
-    js-tokens "^3.0.0"
-
 babel-code-frame@^6.22.0, babel-code-frame@^6.26.0:
   version "6.26.0"
   resolved "http://registry.npm.taobao.org/babel-code-frame/download/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
@@ -329,34 +375,6 @@ babel-generator@^6.18.0, babel-generator@^6.26.0:
     lodash "^4.17.4"
     source-map "^0.5.7"
     trim-right "^1.0.1"
-
-babel-generator@^7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-generator/-/babel-generator-7.0.0-beta.3.tgz#afa85e34c50ef52ccd0ef37f4c4b5e1df65cac04"
-  integrity sha512-Bok77tKwQZUVaLBRnDGDEaMZ4xEeyvzsgnCRxlVgfKmgn+vPxuka//ug3nrMmmgZ8TAMVPoXzeaAcs47lExrPg==
-  dependencies:
-    babel-types "7.0.0-beta.3"
-    jsesc "^2.5.1"
-    lodash "^4.2.0"
-    source-map "^0.5.0"
-    trim-right "^1.0.1"
-
-babel-helper-function-name@7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-helper-function-name/-/babel-helper-function-name-7.0.0-beta.3.tgz#e86dd2eb2c09e06e392e79e203fc02427b24c871"
-  integrity sha512-iMWYqwDarQOVlEGcK1MfbtK9vrFGs5Z4UQsdASJUHdhBp918EM5kndwriiIbhUX8gr2B/CEV/udJkFTrHsjdMQ==
-  dependencies:
-    babel-helper-get-function-arity "7.0.0-beta.3"
-    babel-template "7.0.0-beta.3"
-    babel-traverse "7.0.0-beta.3"
-    babel-types "7.0.0-beta.3"
-
-babel-helper-get-function-arity@7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-beta.3.tgz#61a47709318a31bc2db872f4be9b4c8447198be8"
-  integrity sha512-ZkYFRMWKx1c9fUW72YNM3eieBG701CMbLjmLLWmJTTPc0F0kddS9Fwok26EAmndUAgD6kFdh7ms3PH94MdGuGQ==
-  dependencies:
-    babel-types "7.0.0-beta.3"
 
 babel-helpers@^6.24.1:
   version "6.24.1"
@@ -430,17 +448,6 @@ babel-runtime@^6.22.0, babel-runtime@^6.26.0:
     core-js "^2.4.0"
     regenerator-runtime "^0.11.0"
 
-babel-template@7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-template/-/babel-template-7.0.0-beta.3.tgz#ebb877b6070ce9912b0d0c22fcad3372165913a8"
-  integrity sha512-urJduLja89kSDGqY8ryw8iIwQnMl30IvhMtMNmDD7vBX0l0oylaLgK+7df/9ODX9vR/PhXuif6HYl5HlzAKXMg==
-  dependencies:
-    babel-code-frame "7.0.0-beta.3"
-    babel-traverse "7.0.0-beta.3"
-    babel-types "7.0.0-beta.3"
-    babylon "7.0.0-beta.27"
-    lodash "^4.2.0"
-
 babel-template@^6.16.0, babel-template@^6.24.1, babel-template@^6.26.0:
   version "6.26.0"
   resolved "http://registry.npm.taobao.org/babel-template/download/babel-template-6.26.0.tgz#de03e2d16396b069f46dd9fff8521fb1a0e35e02"
@@ -451,20 +458,6 @@ babel-template@^6.16.0, babel-template@^6.24.1, babel-template@^6.26.0:
     babel-types "^6.26.0"
     babylon "^6.18.0"
     lodash "^4.17.4"
-
-babel-traverse@7.0.0-beta.3, babel-traverse@^7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-traverse/-/babel-traverse-7.0.0-beta.3.tgz#3cf0a45d53d934d85275d8770775d7944fc7c199"
-  integrity sha512-xyh/aPYuedMAfQlSj2kjHjsEmY5/Dpxs576L05DySAVMrV+ADX6l4mTOLysAEGwJfkePJlDLhFuS6SKaxv1V7w==
-  dependencies:
-    babel-code-frame "7.0.0-beta.3"
-    babel-helper-function-name "7.0.0-beta.3"
-    babel-types "7.0.0-beta.3"
-    babylon "7.0.0-beta.27"
-    debug "^3.0.1"
-    globals "^10.0.0"
-    invariant "^2.2.0"
-    lodash "^4.2.0"
 
 babel-traverse@^6.0.0, babel-traverse@^6.18.0, babel-traverse@^6.26.0:
   version "6.26.0"
@@ -481,15 +474,6 @@ babel-traverse@^6.0.0, babel-traverse@^6.18.0, babel-traverse@^6.26.0:
     invariant "^2.2.2"
     lodash "^4.17.4"
 
-babel-types@7.0.0-beta.3, babel-types@^7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.npmjs.org/babel-types/-/babel-types-7.0.0-beta.3.tgz#cd927ca70e0ae8ab05f4aab83778cfb3e6eb20b4"
-  integrity sha512-36k8J+byAe181OmCMawGhw+DtKO7AwexPVtsPXoMfAkjtZgoCX3bEuHWfdE5sYxRM8dojvtG/+O08M0Z/YDC6w==
-  dependencies:
-    esutils "^2.0.2"
-    lodash "^4.2.0"
-    to-fast-properties "^2.0.0"
-
 babel-types@^6.0.0, babel-types@^6.18.0, babel-types@^6.26.0:
   version "6.26.0"
   resolved "http://registry.npm.taobao.org/babel-types/download/babel-types-6.26.0.tgz#a3b073f94ab49eb6fa55cd65227a334380632497"
@@ -499,11 +483,6 @@ babel-types@^6.0.0, babel-types@^6.18.0, babel-types@^6.26.0:
     esutils "^2.0.2"
     lodash "^4.17.4"
     to-fast-properties "^1.0.3"
-
-babylon@7.0.0-beta.27:
-  version "7.0.0-beta.27"
-  resolved "https://registry.npmjs.org/babylon/-/babylon-7.0.0-beta.27.tgz#b6edd30ef30619e2f630eb52585fdda84e6542cd"
-  integrity sha512-ksRx+r8eFIfdt63MCgLc9VxGL7W3jcyveQvMpNMVHgW+eb9mq3Xbm45FLCNkw8h92RvoNp4uuiwzcCEwxjDBZg==
 
 babylon@^6.18.0:
   version "6.18.0"
@@ -872,10 +851,17 @@ debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@^3.0.1, debug@^3.1.0:
+debug@^3.1.0:
   version "3.2.6"
   resolved "http://registry.npm.taobao.org/debug/download/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   integrity sha1-6D0X3hbYp++3cX7b5fsQE17uYps=
+  dependencies:
+    ms "^2.1.1"
+
+debug@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
 
@@ -1489,12 +1475,7 @@ glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-globals@^10.0.0:
-  version "10.4.0"
-  resolved "https://registry.npmjs.org/globals/-/globals-10.4.0.tgz#5c477388b128a9e4c5c5d01c7a2aca68c68b2da7"
-  integrity sha512-uNUtxIZpGyuaq+5BqGGQHsL4wUlJAXRqOm6g3Y48/CWNGTLONgBibI0lh6lGxjR2HljFYUfszb+mk4WkgMntsA==
-
-globals@^11.0.1:
+globals@^11.0.1, globals@^11.1.0:
   version "11.10.0"
   resolved "https://registry.npmjs.org/globals/-/globals-11.10.0.tgz#1e09776dffda5e01816b3bb4077c8b59c24eaa50"
   integrity sha512-0GZF1RiPKU97IHUO5TORo9w1PwrH/NBPl+fS7oMLdaTRiYmYbwK4NWoZWrAdd0/abG9R2BU+OiwyQpTpE6pdfQ==
@@ -1712,7 +1693,7 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-invariant@^2.2.0, invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "http://registry.npm.taobao.org/invariant/download/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha1-YQ88ksk1nOHbYW5TgAjSP/NRWOY=
@@ -2363,15 +2344,15 @@ jest@^23.6.0:
     import-local "^1.0.0"
     jest-cli "^23.6.0"
 
-js-tokens@^3.0.0, js-tokens@^3.0.2:
-  version "3.0.2"
-  resolved "http://registry.npm.taobao.org/js-tokens/download/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
-  integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/js-tokens/download/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha1-GSA/tZmR35jjoocFDUZHzerzJJk=
+
+js-tokens@^3.0.2:
+  version "3.0.2"
+  resolved "http://registry.npm.taobao.org/js-tokens/download/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
+  integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
 js-yaml@^3.7.0, js-yaml@^3.9.1:
   version "3.12.1"
@@ -2563,7 +2544,7 @@ lodash.unescape@4.0.1:
   resolved "https://registry.npmjs.org/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
-lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
+lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.11"
   resolved "http://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha1-s56mIp72B+zYniyN8SU2iRysm40=

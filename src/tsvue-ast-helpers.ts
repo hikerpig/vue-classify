@@ -1,17 +1,17 @@
-import * as t from 'babel-types'
+import * as t from '@babel/types'
 import { CollectState } from './index'
-import { NodePath } from 'babel-traverse'
+import { NodePath } from '@babel/traverse'
 
 type DictOf<T> = { [key: string]: T }
 
 const TYPE_KEYWORD_CTOR_MAP = {
-  boolean: t.TSBooleanKeyword,
-  number: t.TSNumberKeyword,
-  string: t.TSStringKeyword,
+  boolean: t.tsBooleanKeyword,
+  number: t.tsNumberKeyword,
+  string: t.tsStringKeyword,
 }
 
 function genTypeKeyword(typeStr: string) {
-  const ctor = TYPE_KEYWORD_CTOR_MAP[typeStr] || t.TSAnyKeyword
+  const ctor = TYPE_KEYWORD_CTOR_MAP[typeStr] || t.tsAnyKeyword
   return ctor()
 }
 
@@ -38,19 +38,19 @@ function genPropDecorators(props) {
 
     const decorator = t.decorator(t.callExpression(t.identifier('Prop'), decoratorParam ? [decoratorParam] : []))
 
-    let typeAnnotation: t.TSTypeAnnotation
+    let typeAnnotation: t.tsTypeAnnotation
 
     if (obj.type === 'typesOfArray') {
-      const typeKeywords: t.TypeAnnotation[] = obj.value.map((typeStr: string) => {
+      const typeKeywords: t.TSType[] = obj.value.map((typeStr: string) => {
         return genTypeKeyword(typeStr)
       })
-      const typeRef = t.TSTypeReference(
+      const typeRef = t.tsTypeReference(
         t.identifier('Array'),
-        t.typeParameterInstantiation([t.unionTypeAnnotation(typeKeywords)])
+        t.tsTypeParameterInstantiation([t.tsUnionType(typeKeywords)])
       )
-      typeAnnotation = t.TSTypeAnnotation(typeRef)
+      typeAnnotation = t.tsTypeAnnotation(typeRef)
     } else if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
-      typeAnnotation = t.TSTypeAnnotation(genTypeKeyword(obj.type))
+      typeAnnotation = t.tsTypeAnnotation(genTypeKeyword(obj.type))
     }
 
     if (typeAnnotation && decorator) {
@@ -127,7 +127,7 @@ export function genComputeds(path, state: CollectState) {
 export function genDatas(path, state: CollectState) {
   const nodeLists = path.node.body
   const { data } = state
-  Object.keys(data).forEach((key) => {
+  Object.keys(data).forEach(key => {
     if (key === '_statements') {
       return
     }

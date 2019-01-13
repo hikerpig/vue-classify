@@ -1,5 +1,5 @@
-import babelTraverse from 'babel-traverse'
-import * as t from 'babel-types'
+import babelTraverse from '@babel/traverse'
+import * as t from '@babel/types'
 import { log } from './utils'
 import collectVueProps from './vue-props'
 import collectVueComputed from './vue-computed'

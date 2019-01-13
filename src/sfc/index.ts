@@ -1,6 +1,6 @@
 import * as babelParser from '@babel/parser'
-import * as t from 'babel-types'
-import babelTraverse from 'babel-traverse'
+import * as t from '@babel/types'
+import babelTraverse from '@babel/traverse'
 import { log, getIdentifier } from '../utils'
 import {
   handleIfDirective,

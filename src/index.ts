@@ -1,6 +1,6 @@
-import generate from 'babel-generator'
-import babelTraverse, { NodePath } from 'babel-traverse'
-import * as t from 'babel-types'
+import generate from '@babel/generator'
+import babelTraverse, { NodePath } from '@babel/traverse'
+import * as t from '@babel/types'
 import * as babelParser from '@babel/parser'
 import * as fs from 'fs'
 import { parseComponent } from 'vue-template-compiler'
@@ -17,7 +17,6 @@ import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
 export type CollectStateDatas = {
   [key: string]: NodePath[]
 }
-
 
 export type CollectState = {
   name: string | void
