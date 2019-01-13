@@ -24,7 +24,7 @@ export default function collectVueWatch(path: NodePath, state: CollectState) {
         if (grandParent && grandParent.key.name === parentKey) {
           processNodePath(propPath.node.key.name, propPath, state)
         }
-      }
+      },
     })
   }
 }

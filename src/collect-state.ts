@@ -1,4 +1,3 @@
-
 /**
  * Collect vue component state(data, props, computed, watch)
  */

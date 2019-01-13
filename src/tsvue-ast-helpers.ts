@@ -90,10 +90,7 @@ export function genImports(path, collect, state: CollectState) {
     propertyDecoratorSpecifiers.push(t.importSpecifier(t.identifier('Watch'), t.identifier('Watch')))
   }
   if (propertyDecoratorSpecifiers.length) {
-    const importD = t.importDeclaration(
-      propertyDecoratorSpecifiers,
-      t.stringLiteral('vue-property-decorator')
-    )
+    const importD = t.importDeclaration(propertyDecoratorSpecifiers, t.stringLiteral('vue-property-decorator'))
     collect.imports.push(importD)
   }
 
@@ -171,15 +168,10 @@ export function genWatches(path: NodePath, state: CollectState) {
       const decorator = t.decorator(t.callExpression(t.identifier('Watch'), [t.stringLiteral(key)]))
       const paramList = funcNode.params
       const blockStatement = funcNode.body
-      cMethod = t.classMethod('method',
-        t.identifier(methodName),
-        paramList,
-        blockStatement,
-      )
-      cMethod.decorators = [ decorator ]
+      cMethod = t.classMethod('method', t.identifier(methodName), paramList, blockStatement)
+      cMethod.decorators = [decorator]
 
       nodeLists.push(cMethod)
     }
   })
 }
-

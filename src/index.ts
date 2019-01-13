@@ -17,7 +17,6 @@ export type CollectStateDatas = {
 }
 
 export type CollectWatches = {
-  // [key: string]: NodePath[]
   [key: string]: Array<t.ObjectMethod | t.ObjectProperty>
 }
 
@@ -41,15 +40,28 @@ const state: CollectState = {
   components: {},
 }
 
-// Life-cycle methods relations mapping
-const cycle = {
-  created: 'componentWillMount',
-  mounted: 'componentDidMount',
-  updated: 'componentDidUpdate',
-  beforeDestroy: 'componentWillUnmount',
-  errorCaptured: 'componentDidCatch',
-  render: 'render',
-}
+const LIFECYCLE_HOOKS = [
+  'beforeCreate',
+  'created',
+  'beforeMount',
+  'mounted',
+  'beforeUpdate',
+  'updated',
+  'beforeDestroy',
+  'destroyed',
+  'activated',
+  'deactivated',
+  'errorCaptured',
+  'ssrPrefetch'
+]
+
+const VUE_ROUTER_HOOKS = [
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate',
+]
+
+const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
 const collect = {
   imports: [],
@@ -95,8 +107,8 @@ export default function transform(src, targetPath, isSFC) {
       const name = path.node.key.name
       if (path.parentPath.parent.key && ['methods', 'watch'].includes(path.parentPath.parent.key.name)) {
         handleGeneralMethods(path, collect, state, name)
-      } else if (cycle[name]) {
-        handleCycleMethods(path, collect, state, name, cycle[name], isSFC)
+      } else if (VUE_ECO_HOOKS.includes(name)) {
+        handleCycleMethods(path, collect, state, name, isSFC)
       } else {
         if (name === 'data' || state.computeds[name]) {
           return

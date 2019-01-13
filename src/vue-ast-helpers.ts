@@ -47,7 +47,6 @@ const nestedMethodsVisitor = {
 }
 
 function createClassMethod(path, state, name) {
-  const body = path.node.body
   const blocks = []
   let params = []
 
@@ -68,87 +67,14 @@ function replaceThisExpression(path, key, state) {
   path.stop()
 }
 
-function createRenderMethod(path, state, name) {
-  if (path.node.params.length) {
-    log(`
-        Maybe you will call $createElement or h method in your render, but react does not support it.
-        And it's maybe cause some unknown error in transforming
-    `)
-  }
-  path.traverse({
-    ThisExpression(thisPath) {
-      const parentNode = thisPath.parentPath.parentPath.parent
-      const isValid =
-        t.isExpressionStatement(parentNode) ||
-        t.isVariableDeclaration(parentNode) ||
-        t.isBlockStatement(parentNode) ||
-        t.isJSXElement(parentNode) ||
-        t.isCallExpression(parentNode) ||
-        (t.isJSXAttribute(parentNode) && !parentNode.name.name.startsWith('on'))
-
-      if (isValid) {
-        // prop
-        const key = thisPath.parent.property.name
-        replaceThisExpression(thisPath, key, state)
-      }
-    },
-    JSXAttribute(attrPath) {
-      const attrNode = attrPath.node
-      if (attrNode.name.name === 'class') {
-        attrPath.replaceWith(t.jSXAttribute(t.jSXIdentifier('className'), attrNode.value))
-      }
-
-      if (attrNode.name.name === 'domPropsInnerHTML') {
-        const v = attrNode.value
-        if (t.isLiteral(v)) {
-          attrPath.replaceWith(
-            t.jSXAttribute(
-              t.jSXIdentifier('dangerouslySetInnerHTML'),
-              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), attrNode.value)]))
-            )
-          )
-        } else if (t.isJSXExpressionContainer(v)) {
-          const expression = v.expression
-          if (t.isMemberExpression(expression)) {
-            attrPath.traverse({
-              ThisExpression(thisPath) {
-                const key = thisPath.parent.property.name
-                replaceThisExpression(thisPath, key, state)
-              },
-            })
-          }
-          attrPath.replaceWith(
-            t.jSXAttribute(
-              t.jSXIdentifier('dangerouslySetInnerHTML'),
-              t.jSXExpressionContainer(t.objectExpression([t.objectProperty(t.identifier('__html'), expression)]))
-            )
-          )
-        }
-      }
-    },
-  })
-  let blocks = []
-
-  // computed props
-  const computedProps = Object.keys(state.computeds)
-  if (computedProps.length) {
-    computedProps.forEach(prop => {
-      const v = state.computeds[prop]
-      blocks = blocks.concat(v['_statements'])
-    })
-  }
-  blocks = blocks.concat(path.node.body.body)
-  return t.classMethod('method', t.identifier(name), [], t.blockStatement(blocks))
-}
-
-export function handleCycleMethods(path, collect, state, name, cycleName, isSFC) {
+export function handleCycleMethods(path, collect, state, name, isSFC) {
   if (name === 'render') {
     if (isSFC) {
       return
     }
-    collect.classMethods[cycleName] = createRenderMethod(path, state, name)
+    collect.classMethods[name] = path
   } else {
-    collect.classMethods[cycleName] = createClassMethod(path, state, cycleName)
+    collect.classMethods[name] = createClassMethod(path, state, name)
   }
 }
 
