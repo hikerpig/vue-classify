@@ -7,7 +7,15 @@ import { parseComponent } from 'vue-template-compiler'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
 import { log, parseComponentName, parseName } from './utils'
 
-import { genClassMethods, genImports, genProps, genComputeds, genDatas, genWatches } from './tsvue-ast-helpers'
+import {
+  genClassMethods,
+  genImports,
+  genComponentDecorator,
+  genProps,
+  genComputeds,
+  genDatas,
+  genWatches,
+} from './tsvue-ast-helpers'
 
 import output from './output'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
@@ -127,6 +135,10 @@ export default function transform(source, isSFC) {
   babelTraverse(scriptAst, {
     Program(path) {
       genImports(path, collect, state)
+    },
+
+    ClassDeclaration(path) {
+      genComponentDecorator(path, state)
     },
 
     ClassBody(path) {

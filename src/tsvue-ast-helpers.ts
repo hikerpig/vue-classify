@@ -1,6 +1,6 @@
 import * as t from '@babel/types'
 import { CollectState } from './index'
-import { NodePath } from '@babel/traverse'
+import { NodePath } from 'babel-traverse'
 
 type DictOf<T> = { [key: string]: T }
 
@@ -97,6 +97,35 @@ export function genImports(path, collect, state: CollectState) {
   collect.imports.push(importVueClassComponent)
   collect.imports.push(importVue)
   collect.imports.forEach(node => nodeLists.unshift(node))
+}
+
+export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state: CollectState) {
+  const node = path.node
+
+  if (t.isIdentifier(node.superClass) && node.superClass.name === 'Vue') {
+    const properties: t.ObjectProperty[] = []
+    const parentPath = path.parentPath
+    const componentKeys = Object.keys(state.components)
+    if (componentKeys.length) {
+      const componentProps = []
+      for (const k of componentKeys) {
+        componentProps.push(t.objectProperty(t.identifier(k), t.identifier(state.components[k])))
+      }
+      properties.push(t.objectProperty(t.identifier('components'), t.objectExpression(componentProps)))
+    }
+
+    const decoratorParam = t.objectExpression(properties)
+    const decorator = t.decorator(t.callExpression(t.identifier('Component'), [decoratorParam]))
+
+    // debugger
+    if (parentPath.isExportDeclaration()) {
+      parentPath.insertBefore(decorator as any)
+    } else {
+      node.decorators = [
+        decorator,
+      ]
+    }
+  }
 }
 
 export const genProps = (path, state) => {
