@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.2"></a>
+## [0.0.2](https://gitlab.bestminr.com/fe/vue-classify/compare/v0.0.1...v0.0.2) (2019-01-14)
+
+
+### Features
+
+* generate @Component decorator for class, :sparkles: :heavy_plus_sign: ([2951ab2](https://gitlab.bestminr.com/fe/vue-classify/commit/2951ab2))
+* props default/validator, related [#2](https://gitlab.bestminr.com/fe/vue-classify/issues/2) ([0acaf67](https://gitlab.bestminr.com/fe/vue-classify/commit/0acaf67))
+
+
+
 <a name="0.0.1"></a>
 ## 0.0.1 (2019-01-13)
 
