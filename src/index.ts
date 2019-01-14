@@ -28,7 +28,6 @@ export type CollectStateDatas = {
 type CollectPropObjectMethod = NodePath<t.ObjectMethod | t.FunctionExpression>
 
 export type CollectProps = {
-  // [key: string]: NodePath<t.ObjectMethod | t.ObjectProperty>
   [key: string]: DictOf<{
     type: string
     value: any

@@ -33,7 +33,7 @@
     "build": "tsc --pretty",
     "test": "jest",
     "coverage": "jest --coverage",
-    "watch": "npm run build -- --watch",
+    "dev": "npm run build -- --watch --sourcemap",
     "watch:test": "jest --watch"
   },
   "dependencies": {

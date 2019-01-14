@@ -1,5 +1,6 @@
 import * as t from '@babel/types'
 import { log, getIdentifier } from './utils'
+import { CollectState } from './index'
 
 const nestedMethodsVisitor = {
   VariableDeclaration(path) {
@@ -46,25 +47,20 @@ const nestedMethodsVisitor = {
   },
 }
 
-function createClassMethod(path, state, name) {
-  const blocks = []
-  let params = []
-
-  if (name === 'componentDidCatch') {
-    params = [t.identifier('error'), t.identifier('info')]
-  }
-  path.traverse(nestedMethodsVisitor, { blocks, state })
-  return t.classMethod('method', t.identifier(name), params, t.blockStatement(blocks))
-}
-
-function replaceThisExpression(path, key, state) {
-  if (state.data[key] || state.props[key]) {
-    path.replaceWith(t.memberExpression(t.thisExpression(), getIdentifier(state, key)))
+function createClassMethod(path, state: CollectState, name: string) {
+  const node = path.node
+  if (t.isObjectMethod(node)) {
+    return t.classMethod('method', t.identifier(name), node.params, node.body)
   } else {
-    // from computed
-    path.parentPath.replaceWith(t.identifier(key))
+    const blocks = []
+    let params = []
+    if (name === 'componentDidCatch') {
+      params = [t.identifier('error'), t.identifier('info')]
+    }
+
+    path.traverse(nestedMethodsVisitor, { blocks, state })
+    return t.classMethod('method', t.identifier(name), params, t.blockStatement(blocks))
   }
-  path.stop()
 }
 
 export function handleCycleMethods(path, collect, state, name, isSFC) {

@@ -131,9 +131,7 @@ export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state:
     if (parentPath.isExportDeclaration()) {
       parentPath.insertBefore(decorator as any)
     } else {
-      node.decorators = [
-        decorator,
-      ]
+      node.decorators = [decorator]
     }
   }
 }
