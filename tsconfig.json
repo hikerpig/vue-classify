@@ -14,7 +14,7 @@
     "preserveConstEnums": true,
     "removeComments": false,
     "inlineSourceMap": false,
-    "declaration": true,
+    "allowJs": true,
     "typeRoots": [
       "./node_modules/@types"
     ]
