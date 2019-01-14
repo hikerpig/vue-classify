@@ -1,6 +1,6 @@
 {
   "name": "vue-classify",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Convert option-object style vue component to typescript class component",
   "license": "MIT",
   "repository": "https://gitlab.bestminr.com/fe/vue-classify",
