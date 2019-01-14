@@ -1,5 +1,5 @@
 import * as t from '@babel/types'
-import { CollectState } from './index'
+import { CollectState, CollectComputeds } from './index'
 import { NodePath } from 'babel-traverse'
 
 type DictOf<T> = { [key: string]: T }
@@ -62,7 +62,7 @@ function genPropDecorators(props) {
   return nodes
 }
 
-function processComputeds(computeds: DictOf<NodePath>) {
+function processComputeds(computeds: CollectComputeds) {
   const nodes = []
   // console.log('processComputeds', computeds)
   Object.keys(computeds).forEach(key => {
@@ -177,11 +177,11 @@ export function genDatas(path, state: CollectState) {
   })
 }
 
-export function genWatches(path: NodePath, state: CollectState) {
+export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
   const nodeLists = path.node.body
   const { watches } = state
   Object.keys(watches).forEach(key => {
-    const watchNodePath: NodePath = watches[key]
+    const watchNodePath = watches[key]
     let cMethod: t.ClassMethod
     let funcNode: t.ObjectMethod | t.FunctionExpression
     const node = watchNodePath.node

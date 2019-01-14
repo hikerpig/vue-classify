@@ -1,8 +1,9 @@
 import * as t from '@babel/types'
 import { log } from './utils'
+import { NodePath } from 'babel-traverse'
 
 const nestedPropsVisitor = {
-  ObjectProperty(path) {
+  ObjectProperty(path: NodePath<t.ObjectProperty>) {
     const parentKey = path.parentPath.parent.key
     if (parentKey && parentKey.name === this.childKey) {
       const key = path.node.key
@@ -66,8 +67,8 @@ const nestedPropsVisitor = {
       if (path.parent.key && path.parent.key.name === 'validator') {
         path.traverse(
           {
-            ArrayExpression(path) {
-              this.state.props[this.childKey].validator = path.node
+            ArrayExpression(arrNodePath) {
+              this.state.props[this.childKey].validator = arrNodePath.node
             },
           },
           { state: this.state, childKey: this.childKey }
@@ -83,7 +84,7 @@ export default function collectVueProps(path, state) {
 
   if (childs.length) {
     path.traverse({
-      ObjectProperty(propPath) {
+      ObjectProperty(propPath: NodePath<t.ObjectProperty>) {
         const parentNode = propPath.parentPath.parent
         if (parentNode.key && parentNode.key.name === parentKey) {
           const childNode = propPath.node

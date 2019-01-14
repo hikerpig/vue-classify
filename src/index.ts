@@ -1,5 +1,5 @@
 import generate from '@babel/generator'
-import babelTraverse, { NodePath } from '@babel/traverse'
+import babelTraverse from '@babel/traverse'
 import * as t from '@babel/types'
 import * as babelParser from '@babel/parser'
 import * as fs from 'fs'
@@ -19,13 +19,18 @@ import {
 
 import output from './output'
 import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
+import { NodePath } from 'babel-traverse'
 
 export type CollectStateDatas = {
   [key: string]: NodePath[]
 }
 
+export type CollectComputeds = {
+  [key: string]: NodePath<t.ObjectMethod>
+}
+
 export type CollectWatches = {
-  [key: string]: Array<t.ObjectMethod | t.ObjectProperty>
+  [key: string]: NodePath<t.ObjectMethod | t.ObjectProperty>
 }
 
 export type CollectState = {
@@ -33,7 +38,7 @@ export type CollectState = {
   data: CollectStateDatas
   dataStatements: t.Statement[]
   props: any
-  computeds: any
+  computeds: CollectComputeds
   watches: CollectWatches
   components: any
 }
@@ -106,7 +111,7 @@ export default function transform(source, isSFC) {
       collect.imports.push(path.node)
     },
 
-    ObjectMethod(path: NodePath) {
+    ObjectMethod(path: NodePath<t.ObjectMethod>) {
       const name = path.node.key.name
       const grandParentKey = path.parentPath.parent.key
       const gpkName = grandParentKey && grandParentKey.name

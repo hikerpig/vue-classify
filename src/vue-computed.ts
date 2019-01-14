@@ -1,6 +1,5 @@
 import * as t from '@babel/types'
 import chalk from 'chalk'
-import { getIdentifier, log } from './utils'
 import { NodePath } from '@babel/traverse'
 
 export default function collectVueComputed(path: NodePath, state) {
