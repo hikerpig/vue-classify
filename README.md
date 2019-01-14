@@ -1,6 +1,6 @@
 # vue-classify
 
-Convert object literal style vue component to class style, using [vue-class-component](https://github.com/vuejs/vue-class-component).
+Convert option-object style vue component to [vue-class-component](https://github.com/vuejs/vue-class-component) decorated class.
 
 Inspired by [vue-to-react](https://github.com/dwqs/vue-to-react).
 
