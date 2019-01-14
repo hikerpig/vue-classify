@@ -14,8 +14,6 @@ try {
   //
 }
 
-process.on('exit', () => console.log())
-
 program
   .version(version)
   .usage('[options]')
@@ -71,12 +69,15 @@ function doProcessFile() {
 
   const inputExt = path.extname(name)
   const isSFC = /\.vue$/.test(src)
-  if (isSFC) {
-    if (inputExt !== '.vue') {
-      name += '.vue'
+
+  if (!inputExt) {
+    if (isSFC) {
+      if (inputExt !== '.vue') {
+        name += '.vue'
+      }
+    } else if (!/\.js$/.test(name)) {
+      name += '.ts'
     }
-  } else if (!/\.js$/.test(name)) {
-    name += '.ts'
   }
 
   const targetPath = path.resolve(process.cwd(), path.join(dist, name))
