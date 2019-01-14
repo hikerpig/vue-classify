@@ -60,10 +60,12 @@ export function initData(ast, state: CollectState) {
           const body = path.node.body.body
           state.dataStatements = [].concat(body)
 
-          let propNodes = {}
-          body.forEach(node => {
-            if (t.isReturnStatement(node)) {
+          let propNodes = []
+          path.traverse({
+            ReturnStatement(returnPath) {
+              const node = returnPath.node
               propNodes = node.argument.properties
+              returnPath.stop()
             }
           })
 

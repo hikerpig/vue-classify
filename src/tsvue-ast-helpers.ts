@@ -175,9 +175,8 @@ export function genDatas(path, state: CollectState) {
     }
     const dataNodePath = data[key]
     let property: t.ClassProperty
-    if (t.isMemberExpression(dataNodePath)) {
-      property = t.classProperty(t.identifier(key), dataNodePath)
-    }
+    const id = t.identifier(key)
+    property = t.classProperty(id, dataNodePath as any)
 
     if (property) {
       nodeLists.push(property)

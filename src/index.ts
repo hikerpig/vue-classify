@@ -54,16 +54,6 @@ export type CollectState = {
   components: any
 }
 
-const state: CollectState = {
-  name: undefined,
-  data: {},
-  dataStatements: [],
-  props: {},
-  computeds: {},
-  watches: {},
-  components: {},
-}
-
 const LIFECYCLE_HOOKS = [
   'beforeCreate',
   'created',
@@ -83,11 +73,6 @@ const VUE_ROUTER_HOOKS = ['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUp
 
 const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
-const collect = {
-  imports: [],
-  classMethods: {},
-}
-
 function formatContent(source, isSFC) {
   if (isSFC) {
     const res = parseComponent(source, { pad: 'line' })
@@ -104,6 +89,21 @@ function formatContent(source, isSFC) {
 }
 
 export default function transform(source, isSFC) {
+  const state: CollectState = {
+    name: undefined,
+    data: {},
+    dataStatements: [],
+    props: {},
+    computeds: {},
+    watches: {},
+    components: {},
+  }
+
+  const collect = {
+    imports: [],
+    classMethods: {},
+  }
+
   const component = formatContent(source.toString(), isSFC)
 
   const vast = babelParser.parse(component.js, {

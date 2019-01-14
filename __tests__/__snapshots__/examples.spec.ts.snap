@@ -21,3 +21,115 @@ export default class MyVueCompoennt extends Vue {
 }
 "
 `;
+
+exports[`examples examples/todo-app/TodoList.vue 1`] = `
+"<template>
+
+<div>
+  <BaseInputText
+    v-model=\\"newTodoText\\"
+    placeholder=\\"New todo\\"
+    @keydown.enter=\\"addTodo\\"
+  />
+  <ul v-if=\\"todos.length\\">
+    <TodoListItem
+      v-for=\\"todo in todos\\"
+      :key=\\"todo.id\\"
+      :todo=\\"todo\\"
+      @remove=\\"removeTodo\\"
+    />
+  </ul>
+  <p v-else>
+    Nothing left in the list. Add a new todo in the input above.
+  </p>
+</div>
+
+</template>
+
+<script lang=\\"ts\\">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
+import TodoListItem from './TodoListItem.vue'
+import BaseInputText from './BaseInputText.vue'
+@Component({ components: { BaseInputText: BaseInputText, TodoListItem: TodoListItem } })
+export default class MyVueCompoennt extends Vue {
+  newTodoText = ''
+  todos = [
+    {
+      id: nextTodoId++,
+      text: 'Learn Vue',
+    },
+
+    {
+      id: nextTodoId++,
+      text: 'Learn about single-file components',
+    },
+
+    {
+      id: nextTodoId++,
+      text: 'Fall in love',
+    },
+  ]
+  addTodo() {
+    const trimmedText = this.newTodoText.trim()
+    if (trimmedText) {
+      this.todos.push({
+        id: nextTodoId++,
+        text: trimmedText,
+      })
+
+      this.newTodoText = ''
+    }
+  }
+  removeTodo(idToRemove) {
+    this.todos = this.todos.filter(todo => {
+      return todo.id !== idToRemove
+    })
+  }
+}
+
+</script>"
+`;
+
+exports[`examples examples/todo-app/TodoListItem.vue 1`] = `
+"<template>
+
+<li>
+  { todo.text }
+  <button @click=\\"$emit('remove', todo.id)\\">
+    X
+  </button>
+</li>
+
+</template>
+
+<script lang=\\"ts\\">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+@Component({})
+export default class MyVueCompoennt extends Vue {
+  @Prop({ required: true }) todo: any
+}
+
+</script>"
+`;
+
+exports[`examples examples/watch/WatchExample.js 1`] = `
+"import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop, Watch } from 'vue-property-decorator'
+@Component({})
+export default class Watchexample extends Vue {
+  @Prop() value: number
+  currentValue = this.value
+  @Watch('currentValue') onCurrentValueChange(val) {
+    this.$emit('input', val)
+  }
+  @Watch('value') onValueChange(val) {
+    this.currentValue = val
+  }
+}
+"
+`;
