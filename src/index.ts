@@ -44,8 +44,19 @@ export type CollectVuexMap = {
   [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
 }
 
+export enum WatchOptionType {
+  Get,
+  Option,
+}
+
 export type CollectWatches = {
-  [key: string]: NodePath<t.ObjectMethod | t.ObjectProperty>
+  [key: string]: {
+    node: t.ObjectMethod | t.ObjectProperty | t.ObjectExpression
+    options: {
+      deep?: boolean
+      immediate?: boolean
+    }
+  }
 }
 
 export type CollectState = {

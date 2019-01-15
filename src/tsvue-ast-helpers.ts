@@ -2,7 +2,6 @@ import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
 import { log } from './utils'
-import { decorator } from 'babel-types'
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -243,10 +242,9 @@ export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
   const nodeLists = path.node.body
   const { watches } = state
   Object.keys(watches).forEach(key => {
-    const watchNodePath = watches[key]
+    const { node, options } = watches[key]
     let cMethod: t.ClassMethod
     let funcNode: t.ObjectMethod | t.FunctionExpression
-    const node = watchNodePath.node
     if (t.isObjectMethod(node)) {
       funcNode = node
     } else if (t.isObjectProperty(node)) {
@@ -256,7 +254,17 @@ export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
     }
     if (funcNode) {
       const methodName = `on${key[0].toUpperCase()}${key.slice(1)}Change`
-      const decorator = t.decorator(t.callExpression(t.identifier('Watch'), [t.stringLiteral(key)]))
+      const watchOptionProps: t.ObjectProperty[] = []
+      if (options) {
+        for (const k of Object.keys(options)) {
+          watchOptionProps.push(t.objectProperty(t.identifier(k), t.booleanLiteral(options[k])))
+        }
+      }
+      const watchOptionNode = watchOptionProps.length ? t.objectExpression(watchOptionProps): null
+      const watchDecParams: any[] = [
+        t.stringLiteral(key),
+      ].concat(watchOptionNode ? [watchOptionNode]: [])
+      const decorator = t.decorator(t.callExpression(t.identifier('Watch'), watchDecParams))
       const paramList = funcNode.params
       const blockStatement = funcNode.body
       cMethod = t.classMethod('method', t.identifier(methodName), paramList, blockStatement)

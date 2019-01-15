@@ -34,7 +34,10 @@ export function getIdentifier(state, key) {
   return state.data[key] ? t.identifier('state') : t.identifier('props')
 }
 
-export function convertToObjectMethod(key: string, node: t.ObjectProperty) {
+export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.ObjectMethod) {
+  if (t.isObjectMethod(node)) {
+    return node
+  }
   const propValue = node.value
   let methodBody
   let params = []
