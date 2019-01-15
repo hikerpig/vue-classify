@@ -2,7 +2,7 @@ import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
 import { log } from './utils'
-import { decorator } from 'babel-types';
+import { decorator } from 'babel-types'
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -75,7 +75,7 @@ function genPropDecorators(props: CollectProps) {
 
 function processVuexComputeds(state: CollectState) {
   const nodes = []
-  const processCollects = (type) => {
+  const processCollects = type => {
     let obj
     let decoratorName
     if (type === 'state') {
@@ -213,8 +213,12 @@ export function genComputeds(path, state: CollectState) {
   const { computeds } = state
   const computedNodes = processComputeds(computeds)
   const vuexComputedNodes = processVuexComputeds(state)
-  computedNodes.forEach(node => { nodeLists.push(node) })
-  vuexComputedNodes.forEach(node => { nodeLists.push(node) })
+  computedNodes.forEach(node => {
+    nodeLists.push(node)
+  })
+  vuexComputedNodes.forEach(node => {
+    nodeLists.push(node)
+  })
 }
 
 export function genDatas(path, state: CollectState) {

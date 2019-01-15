@@ -7,13 +7,13 @@ export default function collectVueComputed(path: NodePath<any>, state: CollectSt
   const childs: t.Node[] = path.node.value.properties
 
   if (childs.length) {
-    childs.forEach((childNode) => {
+    childs.forEach(childNode => {
       if (t.isObjectProperty(childNode)) {
         const key = childNode.key.name
         const propValue = childNode.value
         if (t.isCallExpression(propValue)) {
           const callee = propValue.callee
-          const calleeName = t.isIdentifier(callee) ? callee.name: null
+          const calleeName = t.isIdentifier(callee) ? callee.name : null
           if (calleeName === 'mapState') {
             state.computedStates[key] = childNode
           } else if (calleeName === 'mapGetter') {
