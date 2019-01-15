@@ -5,6 +5,7 @@ import babelTraverse from '@babel/traverse'
 import * as t from '@babel/types'
 import { log } from './utils'
 import collectVueProps from './vue-props'
+import collectVueData from './collectors/vue-data'
 import collectVueComputed from './collectors/vue-computed'
 import collectVueWatch from './collectors/vue-watch'
 import { CollectState } from './index'
@@ -50,33 +51,7 @@ export function initProps(ast, state) {
 }
 
 export function initData(ast, state: CollectState) {
-  babelTraverse(ast, {
-    ObjectMethod(path) {
-      const parent = path.parentPath.parent
-      const name = path.node.key.name
-
-      if (parent && t.isExportDefaultDeclaration(parent)) {
-        if (name === 'data') {
-          const body = path.node.body.body
-          state.dataStatements = [].concat(body)
-
-          let propNodes = []
-          path.traverse({
-            ReturnStatement(returnPath) {
-              const node = returnPath.node
-              propNodes = node.argument.properties
-              returnPath.stop()
-            },
-          })
-
-          propNodes.forEach(propNode => {
-            state.data[propNode.key.name] = propNode.value
-          })
-          path.stop()
-        }
-      }
-    },
-  })
+  collectVueData(ast, state)
 }
 
 export function initComputed(ast, state) {
