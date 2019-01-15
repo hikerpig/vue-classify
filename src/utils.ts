@@ -1,14 +1,18 @@
 import * as t from '@babel/types'
 import chalk from 'chalk'
 
-export function parseName(name) {
+export function parseName(name: string) {
   name = name || 'my-vue-compoennt'
-  const val = name.toLowerCase().split('-')
+  const segs = name.split('-')
   let str = ''
-  val.forEach(v => {
-    v = v[0].toUpperCase() + v.substr(1)
-    str += v
-  })
+  if (segs.length > 1) {
+    segs.forEach(v => {
+      v = v[0].toUpperCase() + v.substr(1).toLowerCase()
+      str += v
+    })
+  } else {
+    str = name
+  }
   return str
 }
 
