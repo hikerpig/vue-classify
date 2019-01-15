@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.4"></a>
+## [0.0.4](https://gitlab.bestminr.com/fe/vue-classify/compare/v0.0.3...v0.0.4) (2019-01-15)
+
+
+### Bug Fixes
+
+* handleGeneralMethods error during collecting methods ([d5a9402](https://gitlab.bestminr.com/fe/vue-classify/commit/d5a9402))
+
+
+### Features
+
+* support simple computed methods, [#3](https://gitlab.bestminr.com/fe/vue-classify/issues/3) ([0380221](https://gitlab.bestminr.com/fe/vue-classify/commit/0380221))
+
+
+
 <a name="0.0.3"></a>
 ## [0.0.3](https://gitlab.bestminr.com/fe/vue-classify/compare/v0.0.2...v0.0.3) (2019-01-14)
 
