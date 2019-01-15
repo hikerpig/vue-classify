@@ -29,3 +29,17 @@ export function log(msg, type = 'error') {
 export function getIdentifier(state, key) {
   return state.data[key] ? t.identifier('state') : t.identifier('props')
 }
+
+export function convertToObjectMethod(key: string, node: t.ObjectProperty) {
+  const propValue = node.value
+  let methodBody
+  let params = []
+  if (t.isArrowFunctionExpression(propValue) || t.isFunctionExpression(propValue)) {
+    methodBody = propValue.body
+    params = propValue.params
+  }
+  if (methodBody) {
+    const id = t.identifier(key)
+    return t.objectMethod('method', id, params, methodBody)
+  }
+}

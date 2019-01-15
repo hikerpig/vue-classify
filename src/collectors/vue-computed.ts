@@ -1,7 +1,7 @@
 import * as t from '@babel/types'
 import { NodePath } from 'babel-traverse'
 import { CollectState } from '../index'
-import { log } from '../utils'
+import { log, convertToObjectMethod } from '../utils'
 
 export default function collectVueComputed(path: NodePath<any>, state: CollectState) {
   const childs: t.Node[] = path.node.value.properties
@@ -21,8 +21,11 @@ export default function collectVueComputed(path: NodePath<any>, state: CollectSt
           } else {
             log(`Computed with '${calleeName}' is not supported`, 'error')
           }
-        } else if (t.isArrowFunctionExpression(propValue)) {
-          state.computeds[key] = childNode
+        } else {
+          const maybeObjectMethod = convertToObjectMethod(key, childNode)
+          if (maybeObjectMethod) {
+            state.computeds[key] = maybeObjectMethod
+          }
         }
       } else if (t.isObjectMethod(childNode)) {
         const key = childNode.key.name
