@@ -51,6 +51,7 @@
     "@types/jest": "^23.3.3",
     "@types/node": "^10.11.4",
     "babel-traverse": "^6.26.0",
+    "coveralls": "^3.0.2",
     "jest": "^23.6.0",
     "prettier": "^1.14.3",
     "rimraf": "^2.6.2",
