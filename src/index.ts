@@ -37,7 +37,11 @@ export type CollectProps = {
 }
 
 export type CollectComputeds = {
-  [key: string]: NodePath<t.ObjectMethod>
+  [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
+}
+
+export type CollectVuexMap = {
+  [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
 }
 
 export type CollectWatches = {
@@ -50,6 +54,8 @@ export type CollectState = {
   dataStatements: t.Statement[]
   props: CollectProps
   computeds: CollectComputeds
+  computedStates: CollectVuexMap
+  computedGetters: CollectVuexMap
   watches: CollectWatches
   components: any
 }
@@ -95,6 +101,8 @@ export default function transform(source, isSFC) {
     dataStatements: [],
     props: {},
     computeds: {},
+    computedStates: {},
+    computedGetters: {},
     watches: {},
     components: {},
   }

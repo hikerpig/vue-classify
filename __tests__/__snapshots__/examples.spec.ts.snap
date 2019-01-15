@@ -1,5 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`examples examples/computeds/SimpleComputed.js 1`] = `
+"import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapState } from 'vuex'
+@Component({})
+export default class MyVueCompoennt extends Vue {
+  get current() {
+    return 1
+  }
+  get next() {
+    return this.now + 1
+  }
+  @State(state => state.listA)
+  listA: any
+  @Getter('user') user: any
+}
+"
+`;
+
 exports[`examples examples/props/Prop.js 1`] = `
 "import Vue from 'vue'
 import Component from 'vue-class-component'

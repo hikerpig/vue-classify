@@ -1,7 +1,8 @@
 import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
-import { DictOf } from './type'
+import { log } from './utils'
+import { decorator } from 'babel-types';
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -64,7 +65,7 @@ function genPropDecorators(props: CollectProps) {
     }
 
     if (typeAnnotation && decorator) {
-      const property = t.classProperty(t.identifier(key), null, typeAnnotation as any, [decorator])
+      const property = t.classProperty(t.identifier(key), null, typeAnnotation, [decorator])
       nodes.push(property)
     }
   }
@@ -72,14 +73,64 @@ function genPropDecorators(props: CollectProps) {
   return nodes
 }
 
+function processVuexComputeds(state: CollectState) {
+  const nodes = []
+  const processCollects = (type) => {
+    let obj
+    let decoratorName
+    if (type === 'state') {
+      obj = state.computedStates
+      decoratorName = 'State'
+    } else {
+      obj = state.computedGetters
+      decoratorName = 'Getter'
+    }
+
+    for (const key of Object.keys(obj)) {
+      const node = obj[key]
+      let decorator: t.Decorator
+      const id = t.identifier(key)
+      if (t.isObjectProperty(node)) {
+        const propValue = node.value
+        if (t.isCallExpression(propValue)) {
+          const callee = propValue.callee
+          const calleeName = callee.name
+          const decCalleeId = t.identifier(decoratorName)
+          decorator = t.decorator(t.callExpression(decCalleeId, propValue.arguments))
+        }
+      }
+
+      if (decorator) {
+        const resultNode = t.classProperty(id, null, t.tsTypeAnnotation(t.tsAnyKeyword()), [decorator])
+        nodes.push(resultNode)
+      }
+    }
+  }
+  processCollects('state')
+  processCollects('geter')
+  return nodes
+}
+
 function processComputeds(computeds: CollectComputeds) {
   const nodes = []
-  // console.log('processComputeds', computeds)
   Object.keys(computeds).forEach(key => {
-    const nodePath = computeds[key]
-    if (nodePath.isObjectMethod()) {
-      const classMethod = t.classMethod('get', t.identifier(key), [], nodePath.node.body)
-      nodes.push(classMethod)
+    const node = computeds[key]
+    const id = t.identifier(key)
+    let methodBody
+    if (t.isObjectMethod(node)) {
+      methodBody = node.body
+    } else if (t.isObjectProperty(node)) {
+      const propValue = node.value
+      if (t.isArrowFunctionExpression(propValue)) {
+        methodBody = propValue.body
+      }
+    }
+    let resultNode
+    if (methodBody) {
+      resultNode = t.classMethod('get', id, [], methodBody)
+    }
+    if (resultNode) {
+      nodes.push(resultNode)
     }
   })
   return nodes
@@ -161,9 +212,9 @@ export function genComputeds(path, state: CollectState) {
   const nodeLists = path.node.body
   const { computeds } = state
   const computedNodes = processComputeds(computeds)
-  computedNodes.forEach(node => {
-    nodeLists.push(node)
-  })
+  const vuexComputedNodes = processVuexComputeds(state)
+  computedNodes.forEach(node => { nodeLists.push(node) })
+  vuexComputedNodes.forEach(node => { nodeLists.push(node) })
 }
 
 export function genDatas(path, state: CollectState) {

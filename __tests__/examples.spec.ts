@@ -6,6 +6,7 @@ describe('examples', () => {
   const EXAMPLE_FILE_LIST = [
     'props/Prop.js',
     'watch/WatchExample.js',
+    'computeds/SimpleComputed.js',
     'todo-app/TodoList.vue',
     'todo-app/TodoListItem.vue',
   ]

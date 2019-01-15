@@ -5,7 +5,7 @@ import babelTraverse from '@babel/traverse'
 import * as t from '@babel/types'
 import { log } from './utils'
 import collectVueProps from './vue-props'
-import collectVueComputed from './vue-computed'
+import collectVueComputed from './collectors/vue-computed'
 import collectVueWatch from './collectors/vue-watch'
 import { CollectState } from './index'
 
@@ -66,7 +66,7 @@ export function initData(ast, state: CollectState) {
               const node = returnPath.node
               propNodes = node.argument.properties
               returnPath.stop()
-            }
+            },
           })
 
           propNodes.forEach(propNode => {
