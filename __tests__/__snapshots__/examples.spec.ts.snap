@@ -135,6 +135,66 @@ export default class MyVueCompoennt extends Vue {
 </script>"
 `;
 
+exports[`examples examples/todomvc/TodoMVC.js 1`] = `
+"import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
+@Component({})
+export default class MyVueCompoennt extends Vue {
+  todos = todoStorage.fetch()
+  newTodo = ''
+  editedTodo = null
+  visibility = 'all'
+  get filteredTodos() {
+    return filters[this.visibility](this.todos)
+  }
+  get remaining() {
+    return filters.active(this.todos).length
+  }
+  @Watch('todos', { deep: true }) onTodosChange(todos) {
+    todoStorage.save(todos)
+  }
+  addTodo() {
+    var value = this.newTodo && this.newTodo.trim()
+    if (!value) {
+      return
+    }
+    this.todos.push({
+      id: todoStorage.uid++,
+      title: value,
+      completed: false,
+    })
+
+    this.newTodo = ''
+  }
+  removeTodo(todo) {
+    this.todos.splice(this.todos.indexOf(todo), 1)
+  }
+  editTodo(todo) {
+    this.beforeEditCache = todo.title
+    this.editedTodo = todo
+  }
+  doneEdit(todo) {
+    if (!this.editedTodo) {
+      return
+    }
+    this.editedTodo = null
+    todo.title = todo.title.trim()
+    if (!todo.title) {
+      this.removeTodo(todo)
+    }
+  }
+  cancelEdit(todo) {
+    this.editedTodo = null
+    todo.title = this.beforeEditCache
+  }
+  removeCompleted() {
+    this.todos = filters.active(this.todos)
+  }
+}
+"
+`;
+
 exports[`examples examples/watch/WatchExample.js 1`] = `
 "import Vue from 'vue'
 import Component from 'vue-class-component'

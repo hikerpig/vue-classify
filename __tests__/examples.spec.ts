@@ -9,6 +9,7 @@ describe('examples', () => {
     'computeds/SimpleComputed.js',
     'todo-app/TodoList.vue',
     'todo-app/TodoListItem.vue',
+    'todomvc/TodoMVC.js',
   ]
 
   EXAMPLE_FILE_LIST.forEach(rPath => {
