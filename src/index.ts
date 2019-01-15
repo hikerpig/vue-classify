@@ -5,7 +5,7 @@ import * as babelParser from '@babel/parser'
 import { parseComponent } from 'vue-template-compiler'
 import { NodePath } from 'babel-traverse'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
-import { log, parseComponentName, parseName } from './utils'
+import { log, parseComponentName, parseName, visitTopLevelDecalration } from './utils'
 
 import {
   genClassMethods,
@@ -90,6 +90,15 @@ const VUE_ROUTER_HOOKS = ['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUp
 
 const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
+const HANDLED_OPTION_KEYS = [
+  'name',
+  'components',
+  'props',
+  'data',
+  'computed',
+  'watch',
+]
+
 function formatContent(source, isSFC) {
   if (isSFC) {
     const res = parseComponent(source, { pad: 'line' })
@@ -136,27 +145,36 @@ export default function transform(source, isSFC) {
   initWatch(vast, state)
   initComponents(vast, state) // SFC
 
+  visitTopLevelDecalration(vast, (path, dec) => {
+    dec.properties.forEach(propNode => {
+      if (t.isSpreadElement(propNode)) {
+        return
+      }
+      const key = propNode.key.name
+      if (key === 'methods') {
+        if (t.isObjectProperty(propNode)) {
+          if (t.isObjectExpression(propNode.value)) {
+            propNode.value.properties.forEach(methodNode => {
+              const name = methodNode.key.name
+              handleGeneralMethods(methodNode, collect, state, name)
+            })
+          }
+        }
+      } else if (VUE_ECO_HOOKS.includes(key)) {
+        handleCycleMethods(path, collect, state, name, isSFC)
+      } else if (HANDLED_OPTION_KEYS.includes(key)) {
+        // will collect in somewhere else
+      } else {
+        // TODO: should add to Component decorator
+        log(`The ${key} option maybe be not support now`)
+      }
+    })
+    path.stop()
+  })
+
   babelTraverse(vast, {
     ImportDeclaration(path: NodePath) {
       collect.imports.push(path.node)
-    },
-
-    ObjectMethod(path: NodePath<t.ObjectMethod>) {
-      const name = path.node.key.name
-      const grandParentKey = path.parentPath.parent.key
-      const gpkName = grandParentKey && grandParentKey.name
-      if (gpkName === 'methods') {
-        handleGeneralMethods(path, collect, state, name)
-      } else if (VUE_ECO_HOOKS.includes(name)) {
-        handleCycleMethods(path, collect, state, name, isSFC)
-      } else if (gpkName === 'watch') {
-        // will collect in somewhere else
-      } else {
-        if (name === 'data' || state.computeds[name]) {
-          return
-        }
-        log(`The ${name} method maybe be not support now`)
-      }
     },
   })
 

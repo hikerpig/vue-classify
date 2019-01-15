@@ -1,5 +1,7 @@
 import * as t from '@babel/types'
 import chalk from 'chalk'
+import babelTraverse from '@babel/traverse'
+import { NodePath } from 'babel-traverse'
 
 export function parseName(name: string) {
   name = name || 'my-vue-compoennt'
@@ -30,10 +32,6 @@ export function log(msg, type = 'error') {
   console.log(chalk.green(msg))
 }
 
-export function getIdentifier(state, key) {
-  return state.data[key] ? t.identifier('state') : t.identifier('props')
-}
-
 export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.ObjectMethod) {
   if (t.isObjectMethod(node)) {
     return node
@@ -49,4 +47,15 @@ export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.Ob
     const id = t.identifier(key)
     return t.objectMethod('method', id, params, methodBody)
   }
+}
+
+export function visitTopLevelDecalration(ast: t.File, cb: (path: NodePath<t.ExportDeclaration>, dec: t.ObjectExpression) => any) {
+  babelTraverse(ast, {
+    ExportDefaultDeclaration(path) {
+      const dec = path.node.declaration
+      if (t.isObjectExpression(dec)) {
+        cb(path, dec)
+      }
+    },
+  })
 }

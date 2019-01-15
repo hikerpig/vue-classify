@@ -1,6 +1,7 @@
 import * as t from '@babel/types'
 import babelTraverse from '@babel/traverse'
 import { CollectState } from '../index'
+import { visitTopLevelDecalration } from '../utils'
 
 export default function collectVueData(ast: t.File, state: CollectState) {
   const collectDataNodes = (propNodes) => {
@@ -28,18 +29,12 @@ export default function collectVueData(ast: t.File, state: CollectState) {
     }
   }
 
-  babelTraverse(ast, {
-    ExportDefaultDeclaration(path) {
-      const dec = path.node.declaration
-      if (t.isObjectExpression(dec)) {
-        dec.properties.forEach((propNode: t.ObjectProperty) => {
-          const keyName = propNode.key.name
-          if (keyName === 'data') {
-            collectData(propNode)
-            path.stop()
-          }
-        })
+  visitTopLevelDecalration(ast, (path, dec) => {
+    dec.properties.forEach((propNode: t.ObjectProperty) => {
+      const keyName = propNode.key.name
+      if (keyName === 'data') {
+        collectData(propNode)
       }
-    },
+    })
   })
 }
