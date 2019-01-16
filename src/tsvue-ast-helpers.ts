@@ -39,8 +39,7 @@ function genPropDecorators(props: CollectProps) {
     }
     if (obj.defaultValue) {
       properties.push(t.objectProperty(t.identifier('default'), obj.defaultValue))
-    }
-    else if (obj.default) {
+    } else if (obj.default) {
       if (t.isObjectMethod(obj.default)) {
         properties.push(obj.default)
       }
@@ -286,14 +285,15 @@ function createClassMethod(node, state: CollectState, name: string) {
   }
 }
 
-export function handleCycleMethods(path, collect, state, name, isSFC) {
+export function handleCycleMethods(node: t.Node, collect, state, name, isSFC) {
+  // console.log('handleCycleMethods', path, name)
   if (name === 'render') {
     if (isSFC) {
       return
     }
-    collect.classMethods[name] = path
+    collect.classMethods[name] = node
   } else {
-    collect.classMethods[name] = createClassMethod(path, state, name)
+    collect.classMethods[name] = createClassMethod(node, state, name)
   }
 }
 
