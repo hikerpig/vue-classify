@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hikerpig/vue-classify.svg?branch=master)](https://travis-ci.org/hikerpig/vue-classify)
 
-[![Coverage Status](https://coveralls.io/repos/github/hikerpig/vue-classify/badge.svg?branch=master)](https://coveralls.io/github/hikerpig/vue-classify?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hikerpig/vue-classify/badge.svg?branch=master)](https://coveralls.io/github/hikerpig/vue-classify?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/hikerpig/vue-classify.svg)](https://greenkeeper.io/)
 
 Convert option-object style vue component to [vue-class-component](https://github.com/vuejs/vue-class-component) decorated class.
 
