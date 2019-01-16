@@ -3,11 +3,11 @@
   "version": "0.0.5",
   "description": "Convert option-object style vue component to typescript class component",
   "license": "MIT",
-  "repository": "https://gitlab.bestminr.com/fe/vue-classify",
+  "repository": "https://github.com/hikerpig/vue-classify",
   "author": {
-    "name": "",
-    "email": "",
-    "url": ""
+    "name": "hikerpig",
+    "email": "hikerpigwinnie@gmail.com",
+    "url": "https://github.com/hikerpig"
   },
   "keywords": [
     "vue",
