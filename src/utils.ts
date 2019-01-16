@@ -62,3 +62,19 @@ export function visitTopLevelDecalration(
     },
   })
 }
+
+/**
+ * Convert fuction expression to object method, make succeeding process easier
+ */
+export function preprocessObjectMethod(ast: t.File) {
+  babelTraverse(ast, {
+    ObjectProperty(path: NodePath<t.ObjectProperty>) {
+      const { node } = path
+      const key = node.key.name
+      const nodeValue = node.value
+      if (t.isArrowFunctionExpression(nodeValue) || t.isFunctionExpression(nodeValue)) {
+        path.replaceWith(t.objectMethod('method', node.key, nodeValue.params, nodeValue.body))
+      }
+    },
+  })
+}

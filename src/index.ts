@@ -5,7 +5,7 @@ import * as babelParser from '@babel/parser'
 import { parseComponent } from 'vue-template-compiler'
 import { NodePath } from 'babel-traverse'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
-import { parseName, visitTopLevelDecalration } from './utils'
+import { parseName, visitTopLevelDecalration, preprocessObjectMethod } from './utils'
 
 import {
   genClassMethods,
@@ -34,6 +34,8 @@ export type CollectProps = {
     value: any
     validator?: OrNull<CollectPropObjectMethod>
     default?: OrNull<CollectPropObjectMethod>
+    defaultValue?: OrNull<t.Literal>
+    required?: OrNull<t.BooleanLiteral>
   }>
 }
 
@@ -138,6 +140,8 @@ export default function transform(source, isSFC) {
     sourceType: 'module',
     plugins: isSFC ? [] : ['jsx'],
   })
+
+  preprocessObjectMethod(vast)
 
   initProps(vast, state)
   initData(vast, state)

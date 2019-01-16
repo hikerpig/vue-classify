@@ -25,7 +25,7 @@ function genPropDecorators(props: CollectProps) {
 
     const properties: Array<t.ObjectProperty | t.ObjectMethod> = []
     if (obj.required) {
-      properties.push(t.objectProperty(t.identifier('required'), t.booleanLiteral(true)))
+      properties.push(t.objectProperty(t.identifier('required'), obj.required as t.BooleanLiteral))
     }
     if (obj.validator) {
       const { validator } = obj
@@ -37,7 +37,10 @@ function genPropDecorators(props: CollectProps) {
         }
       }
     }
-    if (obj.default) {
+    if (obj.defaultValue) {
+      properties.push(t.objectProperty(t.identifier('default'), obj.defaultValue))
+    }
+    else if (obj.default) {
       if (t.isObjectMethod(obj.default)) {
         properties.push(obj.default)
       }

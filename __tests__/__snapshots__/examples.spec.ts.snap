@@ -27,9 +27,18 @@ import { Prop } from 'vue-property-decorator'
 export default class MyVueCompoennt extends Vue {
   @Prop() propA: number
   @Prop() propB: Array<string | number>
-  @Prop({ required: true }) propC: string
-  @Prop() propD: number
-  @Prop() propE: any
+  @Prop({ required: true })
+  propC: string
+  @Prop({ default: 100 })
+  propD: number
+  @Prop({
+    // Object or array defaults must be returned from
+    // a factory function
+    default() {
+      return { message: 'hello' }
+    },
+  })
+  propE: any
   @Prop({
     validator(value) {
       // The value must match one of these strings
@@ -129,7 +138,8 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 @Component({})
 export default class MyVueCompoennt extends Vue {
-  @Prop({ required: true }) todo: any
+  @Prop({ required: true })
+  todo: any
 }
 
 </script>"
@@ -141,7 +151,7 @@ import Component from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
 @Component({
   filters: {
-    pluralize: function(n) {
+    pluralize(n) {
       return n === 1 ? 'item' : 'items'
     },
   },
@@ -150,7 +160,7 @@ import { Watch } from 'vue-property-decorator'
   // before focusing on the input field.
   // http://vuejs.org/guide/custom-directive.html
   directives: {
-    'todo-focus': function(el, binding) {
+    'todo-focus'(el, binding) {
       if (binding.value) {
         el.focus()
       }
