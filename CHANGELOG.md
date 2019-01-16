@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.5"></a>
+## [0.0.5](https://gitlab.bestminr.com/fe/vue-classify/compare/v0.0.4...v0.0.5) (2019-01-16)
+
+
+### Features
+
+* add unhandled options to @Component param properties ([050f74d](https://gitlab.bestminr.com/fe/vue-classify/commit/050f74d))
+* collectVueComputed should support t.FunctionExpression ([93a540a](https://gitlab.bestminr.com/fe/vue-classify/commit/93a540a))
+* Convert fuction expression to object method, make succeeding process easier ([3e9673a](https://gitlab.bestminr.com/fe/vue-classify/commit/3e9673a))
+* optimize methods collecting ([324ef6e](https://gitlab.bestminr.com/fe/vue-classify/commit/324ef6e))
+* will not camelize component name if it's not kebab case ([81d636f](https://gitlab.bestminr.com/fe/vue-classify/commit/81d636f))
+
+
+
 <a name="0.0.4"></a>
 ## [0.0.4](https://gitlab.bestminr.com/fe/vue-classify/compare/v0.0.3...v0.0.4) (2019-01-15)
 
