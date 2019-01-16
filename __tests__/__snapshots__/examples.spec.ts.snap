@@ -139,7 +139,24 @@ exports[`examples examples/todomvc/TodoMVC.js 1`] = `
 "import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
-@Component({})
+@Component({
+  filters: {
+    pluralize: function(n) {
+      return n === 1 ? 'item' : 'items'
+    },
+  },
+
+  // a custom directive to wait for the DOM to be updated
+  // before focusing on the input field.
+  // http://vuejs.org/guide/custom-directive.html
+  directives: {
+    'todo-focus': function(el, binding) {
+      if (binding.value) {
+        el.focus()
+      }
+    },
+  },
+})
 export default class MyVueCompoennt extends Vue {
   todos = todoStorage.fetch()
   newTodo = ''
@@ -159,12 +176,7 @@ export default class MyVueCompoennt extends Vue {
     if (!value) {
       return
     }
-    this.todos.push({
-      id: todoStorage.uid++,
-      title: value,
-      completed: false,
-    })
-
+    this.todos.push({ id: todoStorage.uid++, title: value, completed: false })
     this.newTodo = ''
   }
   removeTodo(todo) {

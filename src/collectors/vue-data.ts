@@ -4,7 +4,7 @@ import { CollectState } from '../index'
 import { visitTopLevelDecalration } from '../utils'
 
 export default function collectVueData(ast: t.File, state: CollectState) {
-  const collectDataNodes = (propNodes) => {
+  const collectDataNodes = propNodes => {
     propNodes.forEach(propNode => {
       state.data[propNode.key.name] = propNode.value
     })
@@ -18,7 +18,7 @@ export default function collectVueData(ast: t.File, state: CollectState) {
     }
     if (t.isFunctionDeclaration(dataNode) || t.isObjectMethod(dataNode)) {
       let propNodes = []
-      dataNode.body.body.forEach((node) => {
+      dataNode.body.body.forEach(node => {
         if (t.isReturnStatement(node)) {
           if (t.isObjectExpression(node.argument)) {
             propNodes = node.argument.properties

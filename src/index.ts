@@ -5,7 +5,7 @@ import * as babelParser from '@babel/parser'
 import { parseComponent } from 'vue-template-compiler'
 import { NodePath } from 'babel-traverse'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
-import { log, parseComponentName, parseName, visitTopLevelDecalration } from './utils'
+import { parseName, visitTopLevelDecalration } from './utils'
 
 import {
   genClassMethods,
@@ -44,6 +44,10 @@ export type CollectVuexMap = {
   [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
 }
 
+export type CollectExtraOptions = {
+  [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
+}
+
 export enum WatchOptionType {
   Get,
   Option,
@@ -69,6 +73,7 @@ export type CollectState = {
   computedGetters: CollectVuexMap
   watches: CollectWatches
   components: any
+  componentOptions: CollectExtraOptions
 }
 
 const LIFECYCLE_HOOKS = [
@@ -90,14 +95,7 @@ const VUE_ROUTER_HOOKS = ['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUp
 
 const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
-const HANDLED_OPTION_KEYS = [
-  'name',
-  'components',
-  'props',
-  'data',
-  'computed',
-  'watch',
-]
+const HANDLED_OPTION_KEYS = ['name', 'components', 'props', 'data', 'computed', 'watch']
 
 function formatContent(source, isSFC) {
   if (isSFC) {
@@ -125,6 +123,7 @@ export default function transform(source, isSFC) {
     computedGetters: {},
     watches: {},
     components: {},
+    componentOptions: {},
   }
 
   const collect = {
@@ -165,8 +164,7 @@ export default function transform(source, isSFC) {
       } else if (HANDLED_OPTION_KEYS.includes(key)) {
         // will collect in somewhere else
       } else {
-        // TODO: should add to Component decorator
-        log(`The ${key} option maybe be not support now`)
+        state.componentOptions[key] = propNode
       }
     })
     path.stop()

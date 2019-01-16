@@ -163,7 +163,7 @@ export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state:
   const node = path.node
 
   if (t.isIdentifier(node.superClass) && node.superClass.name === 'Vue') {
-    const properties: t.ObjectProperty[] = []
+    const properties: Array<t.ObjectProperty | t.ObjectMethod> = []
     const parentPath = path.parentPath
     const componentKeys = Object.keys(state.components)
     if (componentKeys.length) {
@@ -172,6 +172,9 @@ export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state:
         componentProps.push(t.objectProperty(t.identifier(k), t.identifier(state.components[k])))
       }
       properties.push(t.objectProperty(t.identifier('components'), t.objectExpression(componentProps)))
+    }
+    for (const k of Object.keys(state.componentOptions)) {
+      properties.push(state.componentOptions[k])
     }
 
     const decoratorParam = t.objectExpression(properties)
@@ -260,10 +263,8 @@ export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
           watchOptionProps.push(t.objectProperty(t.identifier(k), t.booleanLiteral(options[k])))
         }
       }
-      const watchOptionNode = watchOptionProps.length ? t.objectExpression(watchOptionProps): null
-      const watchDecParams: any[] = [
-        t.stringLiteral(key),
-      ].concat(watchOptionNode ? [watchOptionNode]: [])
+      const watchOptionNode = watchOptionProps.length ? t.objectExpression(watchOptionProps) : null
+      const watchDecParams: any[] = [t.stringLiteral(key)].concat(watchOptionNode ? [watchOptionNode] : [])
       const decorator = t.decorator(t.callExpression(t.identifier('Watch'), watchDecParams))
       const paramList = funcNode.params
       const blockStatement = funcNode.body

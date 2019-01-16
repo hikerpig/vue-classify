@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import babelTraverse from '@babel/traverse'
 import { NodePath } from 'babel-traverse'
 
-export function parseName(name: string) {
+export function parseName(name: string | void) {
   name = name || 'my-vue-compoennt'
   const segs = name.split('-')
   let str = ''
@@ -49,7 +49,10 @@ export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.Ob
   }
 }
 
-export function visitTopLevelDecalration(ast: t.File, cb: (path: NodePath<t.ExportDeclaration>, dec: t.ObjectExpression) => any) {
+export function visitTopLevelDecalration(
+  ast: t.File,
+  cb: (path: NodePath<t.ExportDeclaration>, dec: t.ObjectExpression) => any
+) {
   babelTraverse(ast, {
     ExportDefaultDeclaration(path) {
       const dec = path.node.declaration

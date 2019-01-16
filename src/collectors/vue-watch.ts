@@ -24,7 +24,7 @@ export default function collectVueWatch(path: NodePath, state: CollectState) {
         if (t.isObjectExpression(watchOptionNode)) {
           let handler
           const options = {}
-          watchOptionNode.properties.forEach((optPropNode) => {
+          watchOptionNode.properties.forEach(optPropNode => {
             if (t.isSpreadElement(optPropNode)) {
               return
             }
