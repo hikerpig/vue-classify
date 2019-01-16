@@ -165,7 +165,7 @@ export default function transform(source, isSFC) {
           }
         }
       } else if (VUE_ECO_HOOKS.includes(key)) {
-        handleCycleMethods(path, collect, state, name, isSFC)
+        handleCycleMethods(path, collect, state, key, isSFC)
       } else if (HANDLED_OPTION_KEYS.includes(key)) {
         // will collect in somewhere else
       } else {

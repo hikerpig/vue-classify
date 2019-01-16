@@ -19,6 +19,14 @@ export default class MyVueCompoennt extends Vue {
 "
 `;
 
+exports[`examples examples/hooks/LifeCycle.js 1`] = `
+"import Vue from 'vue'
+import Component from 'vue-class-component'
+@Component({})
+export default class MyVueCompoennt extends Vue {}
+"
+`;
+
 exports[`examples examples/props/Prop.js 1`] = `
 "import Vue from 'vue'
 import Component from 'vue-class-component'

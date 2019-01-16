@@ -10,6 +10,7 @@ describe('examples', () => {
     'todo-app/TodoList.vue',
     'todo-app/TodoListItem.vue',
     'todomvc/TodoMVC.js',
+    'hooks/LifeCycle.js',
   ]
 
   EXAMPLE_FILE_LIST.forEach(rPath => {
