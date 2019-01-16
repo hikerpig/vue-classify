@@ -21,6 +21,8 @@ export default function collectVueComputed(path: NodePath<any>, state: CollectSt
           } else {
             log(`Computed with '${calleeName}' is not supported`, 'error')
           }
+        } else if (t.isObjectExpression(propValue)) {
+          state.computeds[key] = propValue
         } else {
           const maybeObjectMethod = convertToObjectMethod(key, childNode)
           if (maybeObjectMethod) {

@@ -8,6 +8,14 @@ export default {
     next() {
       return this.now + 1
     },
+    value: {
+      get() {
+        return this.current
+      },
+      set(v) {
+        this.current = v
+      },
+    },
     user: mapGetter('user'),
     listA: mapState(state => state.listA),
   }

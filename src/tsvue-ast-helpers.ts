@@ -114,12 +114,22 @@ function processVuexComputeds(state: CollectState) {
 
 function processComputeds(computeds: CollectComputeds) {
   const nodes = []
+
   Object.keys(computeds).forEach(key => {
     const node = computeds[key]
     const id = t.identifier(key)
     let methodBody
     if (t.isObjectMethod(node)) {
       methodBody = node.body
+    } else if (t.isObjectExpression(node)) {
+      node.properties.forEach(p => {
+        if (t.isObjectMethod(p)) {
+          const propK = p.key.name
+          if (['get', 'set'].includes(propK)) {
+            nodes.push(t.classMethod(propK, id, p.params, p.body))
+          }
+        }
+      })
     } else if (t.isObjectProperty(node)) {
       const propValue = node.value
       if (t.isArrowFunctionExpression(propValue)) {

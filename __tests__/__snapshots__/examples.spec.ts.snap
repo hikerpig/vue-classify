@@ -12,6 +12,12 @@ export default class MyVueCompoennt extends Vue {
   get next() {
     return this.now + 1
   }
+  get value() {
+    return this.current
+  }
+  set value(v) {
+    this.current = v
+  }
   @State(state => state.listA)
   listA: any
   @Getter('user') user: any
@@ -192,6 +198,14 @@ export default class MyVueCompoennt extends Vue {
   }
   get remaining() {
     return filters.active(this.todos).length
+  }
+  get allDone() {
+    return this.remaining === 0
+  }
+  set allDone(value) {
+    this.todos.forEach(function(todo) {
+      todo.completed = value
+    })
   }
   @Watch('todos', { deep: true }) onTodosChange(todos) {
     todoStorage.save(todos)
