@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - 'node' # use latest stable nodejs version
+cache: npm
 script:
   - npm run coverage # jest test with coverage flag does coverage too
 after_script:
