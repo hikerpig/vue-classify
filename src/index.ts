@@ -15,10 +15,11 @@ import {
   genComputeds,
   genDatas,
   genWatches,
+  handleCycleMethods,
+  handleGeneralMethods ,
 } from './tsvue-ast-helpers'
 
 import output from './output'
-import { handleCycleMethods, handleGeneralMethods } from './vue-ast-helpers'
 import { DictOf, OrNull } from './type'
 
 export type CollectStateDatas = {

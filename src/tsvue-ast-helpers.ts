@@ -1,7 +1,7 @@
 import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
-import { log } from './utils'
+import { log, convertToObjectMethod } from './utils'
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -274,4 +274,26 @@ export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
       nodeLists.push(cMethod)
     }
   })
+}
+
+function createClassMethod(node, state: CollectState, name: string) {
+  const maybeObjectMethod = convertToObjectMethod(name, node)
+  if (maybeObjectMethod) {
+    return t.classMethod('method', t.identifier(name), maybeObjectMethod.params, maybeObjectMethod.body)
+  }
+}
+
+export function handleCycleMethods(path, collect, state, name, isSFC) {
+  if (name === 'render') {
+    if (isSFC) {
+      return
+    }
+    collect.classMethods[name] = path
+  } else {
+    collect.classMethods[name] = createClassMethod(path, state, name)
+  }
+}
+
+export function handleGeneralMethods(node, collect, state, name) {
+  collect.classMethods[name] = createClassMethod(node, state, name)
 }
