@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/hikerpig/vue-classify/compare/v0.0.6...v0.1.0) (2019-01-17)
+
+
+### Features
+
+* support get/set option in computed :sparkles: :white_check_mark: ([459ab26](https://github.com/hikerpig/vue-classify/commit/459ab26))
+* **formatting:** change babel generator and prettier format config ([f5be03a](https://github.com/hikerpig/vue-classify/commit/f5be03a))
+
+
+
 <a name="0.0.6"></a>
 ## [0.0.6](https://github.com/hikerpig/vue-classify/compare/v0.0.5...v0.0.6) (2019-01-16)
 
