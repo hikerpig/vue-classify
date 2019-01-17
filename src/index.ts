@@ -208,7 +208,7 @@ export default function transform(source, isSFC) {
 
   const r = generate(scriptAst, {
     quotes: 'single',
-    retainLines: true,
+    retainLines: false,
   })
   const scriptCode = r.code
 

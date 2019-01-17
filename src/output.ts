@@ -1,12 +1,19 @@
 import * as fs from 'fs'
 import * as format from 'prettier-eslint'
 
+const PRETTIER_CONFIG = {
+  parser: 'babylon',
+  printWidth: 120,
+  tabWidth: 2,
+  singleQuote: true,
+  semi: false,
+  trailingComma: 'all',
+}
+
 export function formatScriptCode(code) {
   const opts = {
     text: code,
-    prettierOptions: {
-      parser: 'babylon',
-    },
+    prettierOptions: PRETTIER_CONFIG,
     eslintConfig: {
       parserOptions: {
         ecmaVersion: 7,
