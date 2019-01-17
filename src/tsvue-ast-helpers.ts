@@ -2,6 +2,7 @@ import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
 import { NodePath } from 'babel-traverse'
 import { log, convertToObjectMethod } from './utils'
+import { isArray } from 'util'
 
 const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
@@ -38,7 +39,7 @@ function genPropDecorators(props: CollectProps) {
       }
     }
     if (obj.defaultValue) {
-      properties.push(t.objectProperty(t.identifier('default'), obj.defaultValue))
+      properties.push(t.objectProperty(t.identifier('default'), obj.defaultValue as any))
     } else if (obj.default) {
       if (t.isObjectMethod(obj.default)) {
         properties.push(obj.default)
@@ -50,17 +51,19 @@ function genPropDecorators(props: CollectProps) {
 
     let typeAnnotation: t.TSTypeAnnotation
 
-    if (obj.type === 'typesOfArray') {
-      const typeKeywords: t.TSType[] = obj.value.map((typeStr: string) => {
-        return genTypeKeyword(typeStr)
-      })
-      const typeRef = t.tsTypeReference(
-        t.identifier('Array'),
-        t.tsTypeParameterInstantiation([t.tsUnionType(typeKeywords)])
-      )
-      typeAnnotation = t.tsTypeAnnotation(typeRef)
-    } else if (TYPE_KEYWORD_CTOR_MAP[obj.type]) {
-      typeAnnotation = t.tsTypeAnnotation(genTypeKeyword(obj.type))
+    if ((obj.type as any) == 'typesOfArray') {
+      if (isArray(obj.value)) {
+        const typeKeywords: t.TSType[] = obj.value.map((typeStr: string) => {
+          return genTypeKeyword(typeStr)
+        })
+        const typeRef = t.tsTypeReference(
+          t.identifier('Array'),
+          t.tsTypeParameterInstantiation([t.tsUnionType(typeKeywords)])
+        )
+        typeAnnotation = t.tsTypeAnnotation(typeRef)
+      }
+    } else if (TYPE_KEYWORD_CTOR_MAP[obj.type as any]) {
+      typeAnnotation = t.tsTypeAnnotation(genTypeKeyword(obj.type as any))
     } else {
       typeAnnotation = t.tsTypeAnnotation(t.tsAnyKeyword())
     }
@@ -94,8 +97,6 @@ function processVuexComputeds(state: CollectState) {
       if (t.isObjectProperty(node)) {
         const propValue = node.value
         if (t.isCallExpression(propValue)) {
-          const callee = propValue.callee
-          const calleeName = callee.name
           const decCalleeId = t.identifier(decoratorName)
           decorator = t.decorator(t.callExpression(decCalleeId, propValue.arguments))
         }
@@ -276,7 +277,10 @@ export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
         }
       }
       const watchOptionNode = watchOptionProps.length ? t.objectExpression(watchOptionProps) : null
-      const watchDecParams: any[] = [t.stringLiteral(key)].concat(watchOptionNode ? [watchOptionNode] : [])
+      const watchDecParams: [t.StringLiteral, t.ObjectExpression?] = [t.stringLiteral(key)]
+      if (watchOptionNode) {
+        watchDecParams.push(watchOptionNode)
+      }
       const decorator = t.decorator(t.callExpression(t.identifier('Watch'), watchDecParams))
       const paramList = funcNode.params
       const blockStatement = funcNode.body

@@ -17,7 +17,9 @@ const nestedPropsVisitor = {
         } else if (t.isArrayExpression(node)) {
           const elements = []
           node.elements.forEach(n => {
-            elements.push(n.name.toLowerCase())
+            if ('name' in n) {
+              elements.push(n.name.toLowerCase())
+            }
           })
           if (!elements.length) {
             log(`Providing a type for the ${this.childKey} prop is a good practice.`)
@@ -67,7 +69,7 @@ export default function collectVueProps(path, state) {
     path.traverse({
       ObjectProperty(propPath: NodePath<t.ObjectProperty>) {
         const parentNode = propPath.parentPath.parent
-        if (parentNode.key && parentNode.key.name === parentKey) {
+        if (t.isObjectProperty(parentNode) && parentNode.key && parentNode.key.name === parentKey) {
           const childNode = propPath.node
           const childKey = childNode.key.name
           const childVal = childNode.value
@@ -76,7 +78,9 @@ export default function collectVueProps(path, state) {
             if (t.isArrayExpression(childVal)) {
               const elements = []
               childVal.elements.forEach(node => {
-                elements.push(node.name.toLowerCase())
+                if (t.isIdentifier(node)) {
+                  elements.push(node.name.toLowerCase())
+                }
               })
               state.props[childKey] = {
                 type: elements.length > 1 ? 'typesOfArray' : elements[0] ? elements[0].toLowerCase() : elements,

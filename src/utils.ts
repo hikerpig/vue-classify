@@ -70,10 +70,19 @@ export function preprocessObjectMethod(ast: t.File) {
   babelTraverse(ast, {
     ObjectProperty(path: NodePath<t.ObjectProperty>) {
       const { node } = path
-      const key = node.key.name
       const nodeValue = node.value
-      if (t.isArrowFunctionExpression(nodeValue) || t.isFunctionExpression(nodeValue)) {
-        path.replaceWith(t.objectMethod('method', node.key, nodeValue.params, nodeValue.body))
+      let methodNode: t.ObjectMethod
+      if (t.isArrowFunctionExpression(nodeValue)) {
+        if (t.isExpression(nodeValue.body)) {
+          const statement = t.returnStatement(nodeValue.body)
+          methodNode = t.objectMethod('method', node.key, [], t.blockStatement([statement]))
+        }
+      }
+      if (t.isFunctionExpression(nodeValue)) {
+        methodNode = t.objectMethod('method', node.key, nodeValue.params, nodeValue.body)
+      }
+      if (methodNode) {
+        path.replaceWith(methodNode as any)
       }
     },
   })

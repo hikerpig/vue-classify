@@ -47,9 +47,7 @@ export type CollectVuexMap = {
   [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
 }
 
-export type CollectExtraOptions = {
-  [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
-}
+export type CollectExtraOption = t.ObjectMethod | t.ObjectProperty
 
 export enum WatchOptionType {
   Get,
@@ -76,7 +74,7 @@ export type CollectState = {
   computedGetters: CollectVuexMap
   watches: CollectWatches
   components: any
-  componentOptions: CollectExtraOptions
+  componentOptions: DictOf<CollectExtraOption>
 }
 
 const LIFECYCLE_HOOKS = [
@@ -159,8 +157,10 @@ export default function transform(source, isSFC) {
         if (t.isObjectProperty(propNode)) {
           if (t.isObjectExpression(propNode.value)) {
             propNode.value.properties.forEach(methodNode => {
-              const name = methodNode.key.name
-              handleGeneralMethods(methodNode, collect, state, name)
+              if (!t.isSpreadElement(methodNode)) {
+                const name = methodNode.key.name
+                handleGeneralMethods(methodNode, collect, state, name)
+              }
             })
           }
         }
