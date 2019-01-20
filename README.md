@@ -10,6 +10,12 @@ Inspired by [vue-to-react](https://github.com/dwqs/vue-to-react).
 
 Here is an [online demo](https://vue-classify-demo.surge.sh)
 
+# Install
+
+```
+yarn global add vue-classify
+```
+
 # Usage
 
 ```
@@ -26,9 +32,23 @@ Options:
 
     # transform a vue option-object style component to class component.
 
-    $ vue-classify -i ./components/option-object.js -o ./components/ -n Component
     $ vue-classify ./components/option-object.js ./components/Component.ts
+    $ vue-classify -i ./components/option-object.js -o ./components/ -n Component
 ```
 
+# Preview Screenshots
+
+## Convert props
 ![demo-1](http://vue-classify-demo.surge.sh/demo-1.png)
 
+## SFC
+
+![demo-2](http://vue-classify-demo.surge.sh/demo-2.png)
+
+# Features
+
+- props/watch -> vue-property-decorator decorated class properties
+- computed -> class getter and setter
+- lifecycle hooks -> class methods
+- methods -> class methods
+- other options will be passed to @Component decorator
