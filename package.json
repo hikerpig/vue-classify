@@ -36,6 +36,8 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "dev": "npm run build -- --watch --sourcemap",
+    "docs:dev": "vuepress dev",
+    "docs:build": "vuepress build",
     "watch:test": "jest --watch"
   },
   "dependencies": {
