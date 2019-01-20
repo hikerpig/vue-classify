@@ -8,9 +8,11 @@ const resolve = (...args) => {
   return path.resolve.apply(null, [__dirname, ...args])
 }
 
+const isProd = process.env.NODE_ENV === 'production'
+
 module.exports = {
   entry: './demo-src/index.ts',
-  mode: 'development',
+  mode: isProd ? 'production': 'development',
   output: {
     path: path.resolve(__dirname, 'demo'),
     filename: 'bundle.js'
@@ -46,7 +48,7 @@ module.exports = {
   },
   externals: {
     'codemirror': 'CodeMirror',
-    'vue': 'Vue',
+    'prettier': 'prettier',
   },
   plugins: [
     new VueLoaderPlugin(),

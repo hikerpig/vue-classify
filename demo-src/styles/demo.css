@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+}
+
+.panel {
+  height: 100%;
+  flex-grow: 1;
+  width: 49%;
+}
+
+.panel-wrap {
+  display: flex;
+  justify-content: space-between;
+  min-height: 80vh;
+}
+.CodeMirror {
+  height: auto;
+  border: 1px solid #eee;
+  font-family: Menlo, sans-serif;
+}
+
+.header {
+  width: 100%;
+  text-transform: uppercase;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.select-container {
+  padding: 10px;
+  margin: 10px 0;
+}

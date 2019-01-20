@@ -1,5 +1,6 @@
-import * as fs from 'fs'
-import * as format from 'prettier-eslint'
+// import * as format from 'prettier-eslint'
+import * as prettier from 'prettier'
+import * as babylonParser from 'prettier/parser-babylon'
 
 const PRETTIER_CONFIG = {
   parser: 'babylon',
@@ -8,6 +9,7 @@ const PRETTIER_CONFIG = {
   singleQuote: true,
   semi: false,
   trailingComma: 'all',
+  plugins: [babylonParser],
 }
 
 export function formatScriptCode(code) {
@@ -59,7 +61,9 @@ export function formatScriptCode(code) {
     },
   }
 
-  return format(opts)
+  // return format(opts)
+  // return code
+  return prettier.format(code, PRETTIER_CONFIG)
 }
 
 function output(opts: { scriptCode: string; templateCode: string; isSFC: boolean }) {
