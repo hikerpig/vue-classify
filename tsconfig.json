@@ -15,12 +15,14 @@
     "removeComments": false,
     "inlineSourceMap": false,
     "declaration": true,
+    "experimentalDecorators": true,
     "typeRoots": [
       "./node_modules/@types"
     ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "typings/*"
   ],
   "exclude": [
     "node_modules",
