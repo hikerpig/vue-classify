@@ -8,6 +8,8 @@ Convert option-object style vue component to [vue-class-component](https://githu
 
 Inspired by [vue-to-react](https://github.com/dwqs/vue-to-react).
 
+Here is an [online demo](https://vue-classify-demo.surge.sh)
+
 # Usage
 
 ```
@@ -27,3 +29,6 @@ Options:
     $ vue-classify -i ./components/option-object.js -o ./components/ -n Component
     $ vue-classify ./components/option-object.js ./components/Component.ts
 ```
+
+![demo-1](http://vue-classify-demo.surge.sh/demo-1.png)
+
