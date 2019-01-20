@@ -102,8 +102,8 @@ function formatContent(source, isSFC) {
   if (isSFC) {
     const res = parseComponent(source, { pad: 'line' })
     return {
-      template: res.template.content.replace(/{{/g, '{').replace(/}}/g, '}'),
-      js: res.script.content.replace(/\/\//g, ''),
+      template: res.template.content,
+      js: res.script.content.replace(/\/\/\n/g, ''),
     }
   } else {
     return {

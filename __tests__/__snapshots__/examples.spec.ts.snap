@@ -163,7 +163,7 @@ exports[`examples examples/todo-app/TodoListItem.vue 1`] = `
 "<template>
 
 <li>
-  { todo.text }
+  {{ todo.text }}
   <button @click=\\"$emit('remove', todo.id)\\">
     X
   </button>
