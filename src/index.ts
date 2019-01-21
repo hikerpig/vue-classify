@@ -28,16 +28,14 @@ export type CollectStateDatas = {
 
 type CollectPropObjectMethod = NodePath<t.ObjectMethod | t.FunctionExpression>
 
-export type CollectProps = {
-  [key: string]: DictOf<{
-    type: string
-    value: any
-    validator?: OrNull<CollectPropObjectMethod>
-    default?: OrNull<CollectPropObjectMethod>
-    defaultValue?: OrNull<t.Literal>
-    required?: OrNull<t.BooleanLiteral>
-  }>
-}
+export type CollectProps =  DictOf<{
+  type: string
+  value: any
+  validator?: OrNull<CollectPropObjectMethod>
+  default?: OrNull<CollectPropObjectMethod>
+  defaultValue?: OrNull<t.Literal>
+  required?: OrNull<t.BooleanLiteral>
+}>
 
 export type CollectComputeds = {
   [key: string]: t.ObjectMethod | t.ObjectProperty | t.Expression
@@ -97,7 +95,6 @@ const VUE_ROUTER_HOOKS = ['beforeRouteEnter', 'beforeRouteLeave', 'beforeRouteUp
 const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
 const HANDLED_OPTION_KEYS = ['name', 'components', 'props', 'data', 'computed', 'watch']
-
 
 type SFCParsedResult = {
   template: SFCComponentBlock
@@ -244,21 +241,25 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
 
   // extra blocks
   if (component.blocks) {
-    const blockContentList: string[] = component.blocks.reduce((list, block) => {
-      const blockTypeId = t.jsxIdentifier(block.type)
-      const blockAttrNodes = Object.keys(block.attrs).map((k) => {
-        const attr = block.attrs[k]
-        return t.jsxAttribute(t.jsxIdentifier(k), t.stringLiteral(attr))
-      })
-      const blockSource: string = source.slice(block.start, block.end)
-      const blockAst = t.jsxElement(
-        t.jsxOpeningElement(blockTypeId, blockAttrNodes),
-        t.jsxClosingElement(blockTypeId),
-        [t.jsxText(blockSource)], false
-      )
-      list.push(generate(blockAst).code)
-      return list
-    }, [''])
+    const blockContentList: string[] = component.blocks.reduce(
+      (list, block) => {
+        const blockTypeId = t.jsxIdentifier(block.type)
+        const blockAttrNodes = Object.keys(block.attrs).map(k => {
+          const attr = block.attrs[k]
+          return t.jsxAttribute(t.jsxIdentifier(k), t.stringLiteral(attr))
+        })
+        const blockSource: string = source.slice(block.start, block.end)
+        const blockAst = t.jsxElement(
+          t.jsxOpeningElement(blockTypeId, blockAttrNodes),
+          t.jsxClosingElement(blockTypeId),
+          [t.jsxText(blockSource)],
+          false
+        )
+        list.push(generate(blockAst).code)
+        return list
+      },
+      ['']
+    )
     code += blockContentList.join('\n\n')
   }
   return code

@@ -76,9 +76,10 @@ export function preprocessObjectMethod(ast: t.File) {
         if (t.isExpression(nodeValue.body)) {
           const statement = t.returnStatement(nodeValue.body)
           methodNode = t.objectMethod('method', node.key, [], t.blockStatement([statement]))
+        } else if (t.isBlockStatement(nodeValue.body)) {
+          methodNode = t.objectMethod('method', node.key, [], nodeValue.body)
         }
-      }
-      if (t.isFunctionExpression(nodeValue)) {
+      } else if (t.isFunctionExpression(nodeValue)) {
         methodNode = t.objectMethod('method', node.key, nodeValue.params, nodeValue.body)
       }
       if (methodNode) {

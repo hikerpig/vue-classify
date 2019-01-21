@@ -59,7 +59,7 @@ export default class MyVueCompoennt extends Vue {
   @Prop({
     required: true,
   })
-  propC: string
+  propC: Array<string | number>
   @Prop({
     default: 100,
   })
@@ -75,7 +75,7 @@ export default class MyVueCompoennt extends Vue {
   })
   propE: any
   @Prop({
-    validator(value) {
+    validator() {
       // The value must match one of these strings
       return ['success', 'warning', 'danger'].indexOf(value) !== -1
     },

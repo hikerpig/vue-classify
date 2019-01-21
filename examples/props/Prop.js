@@ -6,7 +6,7 @@ export default {
     propB: [String, Number],
     // Required string
     propC: {
-      type: String,
+      type: [String, Number],
       required: true
     },
     // Number with a default value
@@ -25,7 +25,7 @@ export default {
     },
     // Custom validator function
     propF: {
-      validator: function (value) {
+      validator: (value) => {
         // The value must match one of these strings
         return ['success', 'warning', 'danger'].indexOf(value) !== -1
       }

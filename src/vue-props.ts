@@ -1,6 +1,7 @@
 import * as t from '@babel/types'
 import { log } from './utils'
 import { NodePath } from 'babel-traverse'
+import { CollectState } from './index'
 
 const nestedPropsVisitor = {
   ObjectProperty(path) {
@@ -61,7 +62,7 @@ const nestedPropsVisitor = {
   },
 }
 
-export default function collectVueProps(path, state) {
+export default function collectVueProps(path, state: CollectState) {
   const childs = path.node.value.properties
   const parentKey = path.node.key.name // props;
 
@@ -86,14 +87,14 @@ export default function collectVueProps(path, state) {
                 type: elements.length > 1 ? 'typesOfArray' : elements[0] ? elements[0].toLowerCase() : elements,
                 value: elements.length > 1 ? elements : elements[0] ? elements[0] : elements,
                 required: null,
-                validator: false,
+                validator: null,
               }
             } else if (t.isObjectExpression(childVal)) {
               state.props[childKey] = {
                 type: '',
                 value: undefined,
                 required: null,
-                validator: false,
+                validator: null,
               }
               propPath.traverse(nestedPropsVisitor, { state, childKey })
             } else if (t.isIdentifier(childVal)) {
@@ -102,7 +103,7 @@ export default function collectVueProps(path, state) {
                 type: childVal.name.toLowerCase(),
                 value: undefined,
                 required: null,
-                validator: false,
+                validator: null,
               }
             } else {
               log(`Not supports expression for the ${this.childKey} prop in props.`)
