@@ -162,7 +162,7 @@ export default class MyVueCompoennt extends Vue {
 exports[`examples examples/todo-app/TodoListItem.vue 1`] = `
 "<template>
 
-<li>
+<li class=\\"todo-list-item\\">
   {{ todo.text }}
   <button @click=\\"$emit('remove', todo.id)\\">
     X
@@ -183,7 +183,12 @@ export default class MyVueCompoennt extends Vue {
   todo: any
 }
 
-</script>"
+</script>
+
+<style lang=\\"stylus\\">
+.todo-list-item
+  border: 1px solid #EEE
+</style>"
 `;
 
 exports[`examples examples/todomvc/TodoMVC.js 1`] = `

@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li class="todo-list-item">
     {{ todo.text }}
     <button @click="$emit('remove', todo.id)">
       X
@@ -17,3 +17,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+.todo-list-item
+  border: 1px solid #EEE
+</style>
