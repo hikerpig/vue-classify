@@ -106,6 +106,7 @@ export default function collectVueProps(path, state: CollectState) {
                 validator: null,
               }
             } else {
+              /* istanbul ignore next */
               log(`Not supports expression for the ${this.childKey} prop in props.`)
             }
           }

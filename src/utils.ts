@@ -18,13 +18,6 @@ export function parseName(name: string | void) {
   return str
 }
 
-export function parseComponentName(str) {
-  if (str) {
-    const a = str.split('-').map(e => e[0].toUpperCase() + e.substr(1))
-    return a.join('')
-  }
-}
-
 export function log(msg, type = 'error') {
   if (type === 'error') {
     return console.log(chalk.red(`[vue-classify]: ${msg}`))
@@ -39,10 +32,12 @@ export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.Ob
   const propValue = node.value
   let methodBody
   let params = []
+  /* istanbul ignore next */
   if (t.isArrowFunctionExpression(propValue) || t.isFunctionExpression(propValue)) {
     methodBody = propValue.body
     params = propValue.params
   }
+  /* istanbul ignore next */
   if (methodBody) {
     const id = t.identifier(key)
     return t.objectMethod('method', id, params, methodBody)
