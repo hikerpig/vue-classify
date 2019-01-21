@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/hikerpig/vue-classify/compare/v0.1.0...v0.1.1) (2019-01-21)
+
+
+### Bug Fixes
+
+* sfc parse and format error ([c08ec65](https://github.com/hikerpig/vue-classify/commit/c08ec65))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/hikerpig/vue-classify/compare/v0.0.6...v0.1.0) (2019-01-17)
 
