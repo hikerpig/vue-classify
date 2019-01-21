@@ -98,12 +98,35 @@ const VUE_ECO_HOOKS = LIFECYCLE_HOOKS.concat(VUE_ROUTER_HOOKS)
 
 const HANDLED_OPTION_KEYS = ['name', 'components', 'props', 'data', 'computed', 'watch']
 
-function formatContent(source, isSFC) {
+
+type SFCParsedResult = {
+  template: SFCComponentBlock
+  script: SFCComponentBlock
+  styles: SFCComponentBlock[]
+  customBlocks: SFCComponentBlock[]
+}
+
+type SFCComponentBlock = {
+  type: string
+  attrs: DictOf<string>
+  content: string
+  start: number
+  end: number
+}
+
+type ComponentFormattedResult = {
+  template: string
+  js: string
+  blocks?: SFCComponentBlock[]
+}
+
+function formatContent(source: string, isSFC: boolean): ComponentFormattedResult {
   if (isSFC) {
-    const res = parseComponent(source, { pad: 'line' })
+    const res: SFCParsedResult = parseComponent(source, { pad: 'line' })
     return {
       template: res.template.content,
       js: res.script.content.replace(/\/\/\n/g, ''),
+      blocks: [].concat(res.styles).concat(res.customBlocks),
     }
   } else {
     return {
@@ -113,7 +136,8 @@ function formatContent(source, isSFC) {
   }
 }
 
-export default function transform(source, isSFC) {
+export default function transform(buffer: Buffer | string, isSFC: boolean) {
+  const source = buffer.toString()
   const state: CollectState = {
     name: undefined,
     data: {},
@@ -132,7 +156,7 @@ export default function transform(source, isSFC) {
     classMethods: {},
   }
 
-  const component = formatContent(source.toString(), isSFC)
+  const component = formatContent(source, isSFC)
 
   const vast = babelParser.parse(component.js, {
     sourceType: 'module',
@@ -212,10 +236,30 @@ export default function transform(source, isSFC) {
   })
   const scriptCode = r.code
 
-  const code = output({
+  let code = output({
     scriptCode,
     isSFC,
     templateCode: component.template,
   })
+
+  // extra blocks
+  if (component.blocks) {
+    const blockContentList: string[] = component.blocks.reduce((list, block) => {
+      const blockTypeId = t.jsxIdentifier(block.type)
+      const blockAttrNodes = Object.keys(block.attrs).map((k) => {
+        const attr = block.attrs[k]
+        return t.jsxAttribute(t.jsxIdentifier(k), t.stringLiteral(attr))
+      })
+      const blockSource: string = source.slice(block.start, block.end)
+      const blockAst = t.jsxElement(
+        t.jsxOpeningElement(blockTypeId, blockAttrNodes),
+        t.jsxClosingElement(blockTypeId),
+        [t.jsxText(blockSource)], false
+      )
+      list.push(generate(blockAst).code)
+      return list
+    }, [''])
+    code += blockContentList.join('\n\n')
+  }
   return code
 }
