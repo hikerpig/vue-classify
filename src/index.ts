@@ -28,7 +28,7 @@ export type CollectStateDatas = {
 
 type CollectPropObjectMethod = NodePath<t.ObjectMethod | t.FunctionExpression>
 
-export type CollectProps =  DictOf<{
+export type CollectProps = DictOf<{
   type: string
   value: any
   validator?: OrNull<CollectPropObjectMethod>
@@ -253,12 +253,12 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
           t.jsxOpeningElement(blockTypeId, blockAttrNodes),
           t.jsxClosingElement(blockTypeId),
           [t.jsxText(blockSource)],
-          false
+          false,
         )
         list.push(generate(blockAst).code)
         return list
       },
-      ['']
+      [''],
     )
     code += blockContentList.join('\n\n')
   }
