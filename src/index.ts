@@ -253,12 +253,12 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
           t.jsxOpeningElement(blockTypeId, blockAttrNodes),
           t.jsxClosingElement(blockTypeId),
           [t.jsxText(blockSource)],
-          false,
+          false
         )
         list.push(generate(blockAst).code)
         return list
       },
-      [''],
+      ['']
     )
     code += blockContentList.join('\n\n')
   }

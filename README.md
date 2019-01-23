@@ -12,8 +12,8 @@ Here is an [online demo](https://vue-classify-demo.surge.sh)
 
 # Install
 
-```
-yarn global add vue-classify
+```bash
+npm i -g vue-classify # or yarn global add vue-classify
 ```
 
 # Usage
