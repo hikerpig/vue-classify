@@ -8,6 +8,7 @@ const TYPE_KEYWORD_CTOR_MAP = {
   boolean: t.tsBooleanKeyword,
   number: t.tsNumberKeyword,
   string: t.tsStringKeyword,
+  symbol: t.tsSymbolKeyword,
 }
 
 function genTypeKeyword(typeStr: string) {
