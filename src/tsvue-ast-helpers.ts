@@ -173,12 +173,11 @@ export function genImports(path, collect, state: CollectState) {
   collect.imports.forEach(node => nodeLists.unshift(node))
 }
 
-export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state: CollectState) {
-  const node = path.node
-
+export function genComponentDecorator(node: t.ClassDeclaration, state: CollectState) {
+  let decorator
   if (t.isIdentifier(node.superClass) && node.superClass.name === 'Vue') {
     const properties: Array<t.ObjectProperty | t.ObjectMethod> = []
-    const parentPath = path.parentPath
+    // const parentPath = path.parentPath
     const componentKeys = Object.keys(state.components)
     if (componentKeys.length) {
       const componentProps = []
@@ -192,20 +191,14 @@ export function genComponentDecorator(path: NodePath<t.ClassDeclaration>, state:
     }
 
     const decoratorParam = t.objectExpression(properties)
-    const decorator = t.decorator(t.callExpression(t.identifier('Component'), [decoratorParam]))
-
-    // debugger
-    if (parentPath.isExportDeclaration()) {
-      parentPath.insertBefore(decorator as any)
-    } else {
-      node.decorators = [decorator]
-    }
+    decorator = t.decorator(t.callExpression(t.identifier('Component'), [decoratorParam]))
   }
+  return decorator
 }
 
-export const genProps = (path, state: CollectState) => {
+export const genProps = (body, state: CollectState) => {
   const props = state.props
-  const nodeLists = path.node.body
+  const nodeLists = body
   if (Object.keys(props).length) {
     const propNodes = genPropDecorators(props)
     propNodes.forEach(node => {
@@ -214,8 +207,8 @@ export const genProps = (path, state: CollectState) => {
   }
 }
 
-export function genClassMethods(path, collect) {
-  const nodeLists = path.node.body
+export function genClassMethods(body, collect) {
+  const nodeLists = body
   const methods = collect.classMethods
   if (Object.keys(methods).length) {
     Object.keys(methods).forEach(key => {
@@ -224,8 +217,8 @@ export function genClassMethods(path, collect) {
   }
 }
 
-export function genComputeds(path, state: CollectState) {
-  const nodeLists = path.node.body
+export function genComputeds(body, state: CollectState) {
+  const nodeLists = body
   const { computeds } = state
   const computedNodes = processComputeds(computeds)
   const vuexComputedNodes = processVuexComputeds(state)
@@ -237,8 +230,8 @@ export function genComputeds(path, state: CollectState) {
   })
 }
 
-export function genDatas(path, state: CollectState) {
-  const nodeLists = path.node.body
+export function genDatas(body, state: CollectState) {
+  const nodeLists = body
   const { data } = state
   Object.keys(data).forEach(key => {
     if (key === '_statements') {
@@ -255,8 +248,8 @@ export function genDatas(path, state: CollectState) {
   })
 }
 
-export function genWatches(path: NodePath<t.ClassBody>, state: CollectState) {
-  const nodeLists = path.node.body
+export function genWatches(body: t.Node[], state: CollectState) {
+  const nodeLists = body
   const { watches } = state
   Object.keys(watches).forEach(key => {
     const { node, options } = watches[key]
@@ -301,7 +294,6 @@ function createClassMethod(node, state: CollectState, name: string) {
 }
 
 export function handleCycleMethods(node: t.Node, collect, state, name, isSFC) {
-  // console.log('handleCycleMethods', path, name)
   if (name === 'render') {
     if (isSFC) {
       return

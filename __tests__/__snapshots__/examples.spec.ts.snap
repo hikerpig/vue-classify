@@ -114,6 +114,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import TodoListItem from './TodoListItem.vue'
 import BaseInputText from './BaseInputText.vue'
+let nextTodoId = 1
 @Component({
   components: {
     BaseInputText: BaseInputText,

@@ -75,6 +75,17 @@ export type CollectState = {
   componentOptions: DictOf<CollectExtraOption>
 }
 
+type TopLevelNodeInfo = {
+  isBeforeComponent: boolean
+  node: t.Node
+}
+
+type ProgramCollect = {
+  imports: t.Node[]
+  classMethods: DictOf<any>
+  topLevelNodes: TopLevelNodeInfo[]
+}
+
 const LIFECYCLE_HOOKS = [
   'beforeCreate',
   'created',
@@ -148,9 +159,10 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
     componentOptions: {},
   }
 
-  const collect = {
+  const collect: ProgramCollect = {
     imports: [],
     classMethods: {},
+    topLevelNodes: [],
   }
 
   const component = formatContent(source, isSFC)
@@ -161,6 +173,22 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
   })
 
   preprocessObjectMethod(vast)
+
+  let exportDefaultDeclaration: t.ExportDeclaration
+
+  vast.program.body.forEach((node: t.Node | t.Statement) => {
+    if (t.isImportDeclaration(node)) {
+      collect.imports.push(node)
+    } else if (t.isExportDefaultDeclaration(node)) {
+      exportDefaultDeclaration = node
+    } else {
+      const isBeforeComponent = !exportDefaultDeclaration
+      collect.topLevelNodes.push({
+        isBeforeComponent,
+        node,
+      })
+    }
+  })
 
   initProps(vast, state)
   initData(vast, state)
@@ -196,14 +224,9 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
     path.stop()
   })
 
-  babelTraverse(vast, {
-    ImportDeclaration(path: NodePath) {
-      collect.imports.push(path.node)
-    },
-  })
-
-  // AST for react component
-  const scriptTpl = `export default class ${parseName(state.name)} extends Vue {}`
+  // AST for new component
+  // const scriptTpl = `export default class ${parseName(state.name)} extends Vue {}`
+  const scriptTpl = ``
   const scriptAst = babelParser.parse(scriptTpl, {
     sourceType: 'module',
     plugins: isSFC ? [] : ['jsx'],
@@ -212,18 +235,34 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
   babelTraverse(scriptAst, {
     Program(path) {
       genImports(path, collect, state)
-    },
 
-    ClassDeclaration(path) {
-      genComponentDecorator(path, state)
-    },
+      const addTopLevelNodes = (isBeforeComponent: boolean) => {
+        collect.topLevelNodes
+          .filter(o => o.isBeforeComponent === isBeforeComponent)
+          .reverse()
+          .forEach(o => {
+            path.node.body.push(o.node)
+          })
+      }
 
-    ClassBody(path) {
-      genProps(path, state)
-      genDatas(path, state)
-      genComputeds(path, state)
-      genWatches(path, state)
-      genClassMethods(path, collect)
+      addTopLevelNodes(true)
+
+      const classBody = t.classBody([])
+      const classBodyList = classBody.body
+      const classNode = t.classDeclaration(t.identifier(parseName(state.name)), t.identifier('Vue'), classBody)
+      genProps(classBodyList, state)
+      genDatas(classBodyList, state)
+      genComputeds(classBodyList, state)
+      genWatches(classBodyList, state)
+      genClassMethods(classBodyList, collect)
+      const classDecorator = genComponentDecorator(classNode, state)
+      if (classDecorator) {
+        path.node.body.push(classDecorator)
+      }
+
+      path.node.body.push(t.exportDefaultDeclaration(classNode))
+
+      addTopLevelNodes(false)
     },
   })
 
