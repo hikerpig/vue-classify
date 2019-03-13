@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.3"></a>
+## [0.2.3](https://github.com/hikerpig/vue-classify/compare/v0.2.2...v0.2.3) (2019-03-13)
+
+
+### Bug Fixes
+
+* missing program top level decalrations ([8d5aae8](https://github.com/hikerpig/vue-classify/commit/8d5aae8))
+* props type missing 'symbol' support ([9fb32b7](https://github.com/hikerpig/vue-classify/commit/9fb32b7))
+
+
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/hikerpig/vue-classify/compare/v0.2.1...v0.2.2) (2019-01-23)
 
