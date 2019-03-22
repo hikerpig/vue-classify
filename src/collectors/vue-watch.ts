@@ -3,7 +3,7 @@ import { NodePath } from '@babel/traverse'
 import { CollectState } from '../index'
 import { log, convertToObjectMethod } from '../utils'
 
-export default function collectVueWatch(path: NodePath, state: CollectState) {
+export default function collectVueWatch(path: NodePath<any>, state: CollectState) {
   const childs = path.node.value.properties
 
   const processNode = (key: string, propNode: any, options: any) => {

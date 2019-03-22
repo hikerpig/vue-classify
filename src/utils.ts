@@ -1,7 +1,6 @@
 import * as t from '@babel/types'
 import chalk from 'chalk'
-import babelTraverse from '@babel/traverse'
-import { NodePath } from 'babel-traverse'
+import babelTraverse, { NodePath } from '@babel/traverse'
 
 export function parseName(name: string | void) {
   name = name || 'my-vue-compoennt'
@@ -48,7 +47,7 @@ export function visitTopLevelDecalration(
   ast: t.File,
   cb: (path: NodePath<t.ExportDeclaration>, dec: t.ObjectExpression) => any
 ) {
-  babelTraverse(ast, {
+  babelTraverse(ast as any, {
     ExportDefaultDeclaration(path) {
       const dec = path.node.declaration
       if (t.isObjectExpression(dec)) {

@@ -1,9 +1,8 @@
 import generate from '@babel/generator'
-import babelTraverse from '@babel/traverse'
+import babelTraverse, { NodePath } from '@babel/traverse'
 import * as t from '@babel/types'
 import * as babelParser from '@babel/parser'
 import { parseComponent } from 'vue-template-compiler'
-import { NodePath } from 'babel-traverse'
 import { initComponents, initComputed, initData, initProps, initWatch } from './collect-state'
 import { parseName, visitTopLevelDecalration, preprocessObjectMethod } from './utils'
 
@@ -241,7 +240,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
           .filter(o => o.isBeforeComponent === isBeforeComponent)
           .reverse()
           .forEach(o => {
-            path.node.body.push(o.node)
+            ;(path.node.body as any).push(o.node)
           })
       }
 
@@ -260,13 +259,13 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
         path.node.body.push(classDecorator)
       }
 
-      path.node.body.push(t.exportDefaultDeclaration(classNode))
+      path.node.body.push(t.exportDefaultDeclaration(classNode) as t.Statement)
 
       addTopLevelNodes(false)
     },
   })
 
-  const r = generate(scriptAst, {
+  const r = generate(scriptAst as any, {
     quotes: 'single',
     retainLines: false,
   })
@@ -294,7 +293,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
           [t.jsxText(blockSource)],
           false
         )
-        list.push(generate(blockAst).code)
+        list.push(generate(blockAst as any).code)
         return list
       },
       ['']

@@ -61,7 +61,7 @@ export function initComputed(ast, state) {
       const name = path.node.key.name
       if (parent && t.isExportDefaultDeclaration(parent)) {
         if (name === 'computed') {
-          collectVueComputed(path, state)
+          collectVueComputed(path as any, state)
           path.stop()
         }
       }
@@ -90,10 +90,10 @@ export function initComponents(ast, state) {
       const parent = path.parentPath.parent
       const name = path.node.key.name
       if (parent && t.isExportDefaultDeclaration(parent)) {
-        if (name === 'components') {
-          // collectVueComputed(path, state);
-          const props = path.node.value.properties
-          props.forEach(prop => {
+        const node = path.node
+        if (name === 'components' && t.isObjectExpression(node.value)) {
+          const props = node.value.properties
+          props.forEach((prop: any) => {
             state.components[prop.key.name] = prop.value.name
           })
           path.stop()
