@@ -15,6 +15,7 @@
     "removeComments": false,
     "inlineSourceMap": false,
     "declaration": true,
+    "incremental": true,
     "typeRoots": [
       "./node_modules/@types"
     ]

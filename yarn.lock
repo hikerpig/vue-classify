@@ -3432,10 +3432,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^3.3.4000:
-  version "3.3.4000"
-  resolved "http://registry.npm.taobao.org/typescript/download/typescript-3.3.4000.tgz#76b0f89cfdbf97827e1112d64f283f1151d6adf0"
-  integrity sha1-drD4nP2/l4J+ERLWTyg/EVHWrfA=
+typescript@^3.4.1:
+  version "3.4.1"
+  resolved "http://registry.npm.taobao.org/typescript/download/typescript-3.4.1.tgz?cache=0&other_urls=http%3A%2F%2Fregistry.npm.taobao.org%2Ftypescript%2Fdownload%2Ftypescript-3.4.1.tgz#b6691be11a881ffa9a05765a205cb7383f3b63c6"
+  integrity sha1-tmkb4RqIH/qaBXZaIFy3OD87Y8Y=
 
 uglify-js@^3.1.4:
   version "3.4.9"
