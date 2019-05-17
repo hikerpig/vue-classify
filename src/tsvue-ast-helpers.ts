@@ -51,7 +51,7 @@ function genPropDecorators(props: CollectProps) {
 
     let typeAnnotation: t.TSTypeAnnotation
 
-    if ((obj.type as any) == 'typesOfArray') {
+    if (obj.type === 'typesOfArray') {
       if (isArray(obj.value)) {
         const typeKeywords: t.TSType[] = obj.value.map((typeStr: string) => {
           return genTypeKeyword(typeStr)
