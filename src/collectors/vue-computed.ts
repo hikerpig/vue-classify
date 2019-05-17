@@ -1,5 +1,5 @@
 import * as t from '@babel/types'
-import { NodePath } from 'babel-traverse'
+import { NodePath } from '@babel/traverse'
 import { CollectState } from '../index'
 import { log, convertToObjectMethod } from '../utils'
 

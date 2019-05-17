@@ -1,6 +1,5 @@
 import * as t from '@babel/types'
 import { CollectState, CollectComputeds, CollectStateDatas, CollectProps } from './index'
-import { NodePath } from 'babel-traverse'
 import { log, convertToObjectMethod } from './utils'
 import { isArray } from 'util'
 

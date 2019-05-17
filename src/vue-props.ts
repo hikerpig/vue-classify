@@ -1,6 +1,6 @@
 import * as t from '@babel/types'
 import { log } from './utils'
-import { NodePath } from 'babel-traverse'
+import { NodePath } from '@babel/traverse'
 import { CollectState } from './index'
 
 const nestedPropsVisitor = {
