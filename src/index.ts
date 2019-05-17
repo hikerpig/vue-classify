@@ -226,7 +226,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
   // AST for new component
   // const scriptTpl = `export default class ${parseName(state.name)} extends Vue {}`
   const scriptTpl = ``
-  const scriptAst = babelParser.parse(scriptTpl, {
+  const scriptAst: any = babelParser.parse(scriptTpl, {
     sourceType: 'module',
     plugins: isSFC ? [] : ['jsx'],
   })
@@ -259,13 +259,13 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
         path.node.body.push(classDecorator)
       }
 
-      path.node.body.push(t.exportDefaultDeclaration(classNode) as t.Statement)
+      path.node.body.push(t.exportDefaultDeclaration(classNode) as any)
 
       addTopLevelNodes(false)
     },
   })
 
-  const r = generate(scriptAst as any, {
+  const r = generate(scriptAst, {
     quotes: 'single',
     retainLines: false,
   })

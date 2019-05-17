@@ -45,7 +45,7 @@ export function convertToObjectMethod(key: string, node: t.ObjectProperty | t.Ob
 
 export function visitTopLevelDecalration(
   ast: t.File,
-  cb: (path: NodePath<t.ExportDeclaration>, dec: t.ObjectExpression) => any
+  cb: (path: NodePath<t.ExportDefaultDeclaration>, dec: t.ObjectExpression) => any
 ) {
   babelTraverse(ast as any, {
     ExportDefaultDeclaration(path) {
@@ -61,7 +61,7 @@ export function visitTopLevelDecalration(
  * Convert fuction expression to object method, make succeeding process easier
  */
 export function preprocessObjectMethod(ast: t.File) {
-  babelTraverse(ast, {
+  babelTraverse(ast as any, {
     ObjectProperty(path: NodePath<t.ObjectProperty>) {
       const { node } = path
       const nodeValue = node.value
