@@ -34,7 +34,9 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "dev": "npm run build -- --watch --sourcemap",
-    "watch:test": "jest --watch"
+    "watch:test": "jest --watch",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@babel/generator": "^7.2.2",
@@ -44,7 +46,8 @@
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "prettier": "^1.16.1",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/jest": "24.0.14",
@@ -77,5 +80,6 @@
       "js"
     ],
     "testEnvironment": "node"
-  }
+  },
+  "snyk": true
 }
