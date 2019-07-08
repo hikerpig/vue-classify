@@ -15,7 +15,7 @@ export default function collectVueWatch(path: NodePath<any>, state: CollectState
 
   if (childs.length) {
     childs.forEach(propNode => {
-      const key = propNode.key.name
+      const key = t.isStringLiteral(propNode.key) ? propNode.key.value : propNode.key.name
       const maybeObjectMethod = convertToObjectMethod(key, propNode)
       if (maybeObjectMethod) {
         processNode(key, propNode, {})

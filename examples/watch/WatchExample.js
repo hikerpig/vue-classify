@@ -6,6 +6,10 @@ export default {
   data() {
     return {
       currentValue: this.value,
+      complex: {
+        real: 1,
+        imaginary: 2,
+      },
     }
   },
   watch: {
@@ -14,6 +18,9 @@ export default {
     },
     value(val) {
       this.currentValue = val
+    },
+    'complex.real'(val) {
+      console.log('real part changed')
     },
   },
 }

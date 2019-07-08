@@ -262,7 +262,10 @@ export function genWatches(body: t.Node[], state: CollectState) {
       }
     }
     if (funcNode) {
-      const methodName = `on${key[0].toUpperCase()}${key.slice(1)}Change`
+      const safeKey = `${key[0].toUpperCase()}${key.slice(1)}`.replace(/\.(\w)/g, (m, g1) => {
+        return `${g1.toUpperCase()}`
+      })
+      const methodName = `on${safeKey}Change`
       const watchOptionProps: t.ObjectProperty[] = []
       if (options) {
         for (const k of Object.keys(options)) {

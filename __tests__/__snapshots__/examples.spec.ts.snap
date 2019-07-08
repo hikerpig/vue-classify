@@ -302,6 +302,10 @@ export default class WatchExample extends Vue {
   @Prop()
   value: number
   currentValue = this.value
+  complex = {
+    real: 1,
+    imaginary: 2,
+  }
 
   @Watch('currentValue')
   onCurrentValueChange(val) {
@@ -311,6 +315,11 @@ export default class WatchExample extends Vue {
   @Watch('value')
   onValueChange(val) {
     this.currentValue = val
+  }
+
+  @Watch('complex.real')
+  onComplexRealChange(val) {
+    console.log('real part changed')
   }
 }
 "
