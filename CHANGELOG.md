@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/hikerpig/vue-classify/compare/v0.2.3...v0.2.4) (2019-07-08)
+
+
+### Bug Fixes
+
+* .snyk & package.json to reduce vulnerabilities ([c3aef16](https://github.com/hikerpig/vue-classify/commit/c3aef16))
+
+
+### Features
+
+* support StrintLiteral as in 'watch' options ([3639d24](https://github.com/hikerpig/vue-classify/commit/3639d24))
+
+
+
 <a name="0.2.3"></a>
 ## [0.2.3](https://github.com/hikerpig/vue-classify/compare/v0.2.2...v0.2.3) (2019-03-13)
 
