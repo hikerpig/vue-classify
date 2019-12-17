@@ -46,7 +46,7 @@
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "prettier": "^1.16.1",
-    "snyk": "^1.258.2",
+    "snyk": "^1.261.1",
     "vue-template-compiler": "^2.5.21"
   },
   "devDependencies": {
