@@ -15,6 +15,8 @@
     "no-console": false,
     "prefer-conditional-expression": false,
     "prefer-for-of": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": false,
+    "array-type": false
   }
 }
