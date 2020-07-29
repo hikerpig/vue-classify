@@ -7,7 +7,7 @@ export function parseName(name: string | void) {
   const segs = name.split('-')
   let str = ''
   if (segs.length > 1) {
-    segs.forEach(v => {
+    segs.forEach((v) => {
       v = v[0].toUpperCase() + v.substr(1).toLowerCase()
       str += v
     })
