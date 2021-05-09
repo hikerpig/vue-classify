@@ -13,7 +13,7 @@ describe('examples', () => {
     'hooks/LifeCycle.js',
   ]
 
-  EXAMPLE_FILE_LIST.forEach(rPath => {
+  EXAMPLE_FILE_LIST.forEach((rPath) => {
     it(`examples/${rPath}`, () => {
       const src = join(__dirname, '../examples', rPath)
       // console.log('src', src)

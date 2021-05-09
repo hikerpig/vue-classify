@@ -17,7 +17,7 @@ const nestedPropsVisitor = {
           this.state.props[this.childKey].type = node.name.toLowerCase()
         } else if (t.isArrayExpression(node)) {
           const elements = []
-          node.elements.forEach(n => {
+          node.elements.forEach((n) => {
             if ('name' in n) {
               elements.push(n.name.toLowerCase())
             }
@@ -78,7 +78,7 @@ export default function collectVueProps(path, state: CollectState) {
           if (!state.props[childKey]) {
             if (t.isArrayExpression(childVal)) {
               const elements = []
-              childVal.elements.forEach(node => {
+              childVal.elements.forEach((node) => {
                 if (t.isIdentifier(node)) {
                   elements.push(node.name.toLowerCase())
                 }

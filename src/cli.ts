@@ -90,7 +90,7 @@ function doProcessFile() {
 }
 
 if (useStdin) {
-  process.stdin.on('data', buffer => {
+  process.stdin.on('data', (buffer) => {
     const content = buffer.toString()
     const resultCode = transform(content, false)
     process.stdout.write(resultCode)

@@ -14,7 +14,7 @@ export default function collectVueWatch(path: NodePath<any>, state: CollectState
   }
 
   if (childs.length) {
-    childs.forEach(propNode => {
+    childs.forEach((propNode) => {
       const key = t.isStringLiteral(propNode.key) ? propNode.key.value : propNode.key.name
       const maybeObjectMethod = convertToObjectMethod(key, propNode)
       if (maybeObjectMethod) {
@@ -24,7 +24,7 @@ export default function collectVueWatch(path: NodePath<any>, state: CollectState
         if (t.isObjectExpression(watchOptionNode)) {
           let handler
           const options = {}
-          watchOptionNode.properties.forEach(optPropNode => {
+          watchOptionNode.properties.forEach((optPropNode) => {
             if (t.isSpreadElement(optPropNode)) {
               return
             }
