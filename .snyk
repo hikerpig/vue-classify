@@ -31,3 +31,12 @@ patch:
   SNYK-JS-TREEKILL-536781:
     - snyk > snyk-sbt-plugin > tree-kill:
         patched: '2019-12-11T21:15:26.602Z'
+  SNYK-JS-LODASH-567746:
+    - '@babel/traverse > lodash':
+        patched: '2020-04-30T21:15:52.968Z'
+    - '@babel/traverse > @babel/generator > lodash':
+        patched: '2020-04-30T21:15:52.968Z'
+    - '@babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-04-30T21:15:52.968Z'
+    - '@babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-04-30T21:15:52.968Z'
