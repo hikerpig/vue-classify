@@ -129,7 +129,7 @@ type ComponentFormattedResult = {
 
 function formatContent(source: string, isSFC: boolean): ComponentFormattedResult {
   if (isSFC) {
-    const res: SFCParsedResult = parseComponent(source, { pad: 'line' })
+    const res = parseComponent(source, { pad: 'line' })
     return {
       template: res.template.content,
       js: res.script.content.replace(/\/\/\n/g, ''),
@@ -137,7 +137,7 @@ function formatContent(source: string, isSFC: boolean): ComponentFormattedResult
     }
   } else {
     return {
-      template: null,
+      template: '',
       js: source,
     }
   }
@@ -196,7 +196,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
   initComponents(vast, state) // SFC
 
   visitTopLevelDecalration(vast, (path, dec) => {
-    dec.properties.forEach(propNode => {
+    dec.properties.forEach((propNode) => {
       if (t.isSpreadElement(propNode)) {
         return
       }
@@ -204,7 +204,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
       if (key === 'methods') {
         if (t.isObjectProperty(propNode)) {
           if (t.isObjectExpression(propNode.value)) {
-            propNode.value.properties.forEach(methodNode => {
+            propNode.value.properties.forEach((methodNode) => {
               if (!t.isSpreadElement(methodNode)) {
                 const name = methodNode.key.name
                 handleGeneralMethods(methodNode, collect, state, name)
@@ -237,9 +237,9 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
 
       const addTopLevelNodes = (isBeforeComponent: boolean) => {
         collect.topLevelNodes
-          .filter(o => o.isBeforeComponent === isBeforeComponent)
+          .filter((o) => o.isBeforeComponent === isBeforeComponent)
           .reverse()
-          .forEach(o => {
+          .forEach((o) => {
             ;(path.node.body as any).push(o.node)
           })
       }
@@ -282,7 +282,7 @@ export default function transform(buffer: Buffer | string, isSFC: boolean) {
     const blockContentList: string[] = component.blocks.reduce(
       (list, block) => {
         const blockTypeId = t.jsxIdentifier(block.type)
-        const blockAttrNodes = Object.keys(block.attrs).map(k => {
+        const blockAttrNodes = Object.keys(block.attrs).map((k) => {
           const attr = block.attrs[k]
           return t.jsxAttribute(t.jsxIdentifier(k), t.stringLiteral(attr))
         })

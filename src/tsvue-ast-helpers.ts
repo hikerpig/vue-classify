@@ -79,7 +79,7 @@ function genPropDecorators(props: CollectProps) {
 
 function processVuexComputeds(state: CollectState) {
   const nodes = []
-  const processCollects = type => {
+  const processCollects = (type) => {
     let obj
     let decoratorName
     if (type === 'state') {
@@ -116,14 +116,14 @@ function processVuexComputeds(state: CollectState) {
 function processComputeds(computeds: CollectComputeds) {
   const nodes = []
 
-  Object.keys(computeds).forEach(key => {
+  Object.keys(computeds).forEach((key) => {
     const node = computeds[key]
     const id = t.identifier(key)
     let methodBody
     if (t.isObjectMethod(node)) {
       methodBody = node.body
     } else if (t.isObjectExpression(node)) {
-      node.properties.forEach(p => {
+      node.properties.forEach((p) => {
         if (t.isObjectMethod(p)) {
           const propK = p.key.name
           if (['get', 'set'].includes(propK)) {
@@ -169,7 +169,7 @@ export function genImports(path, collect, state: CollectState) {
 
   collect.imports.push(importVueClassComponent)
   collect.imports.push(importVue)
-  collect.imports.forEach(node => nodeLists.unshift(node))
+  collect.imports.forEach((node) => nodeLists.unshift(node))
 }
 
 export function genComponentDecorator(node: t.ClassDeclaration, state: CollectState) {
@@ -200,7 +200,7 @@ export const genProps = (body, state: CollectState) => {
   const nodeLists = body
   if (Object.keys(props).length) {
     const propNodes = genPropDecorators(props)
-    propNodes.forEach(node => {
+    propNodes.forEach((node) => {
       nodeLists.push(node)
     })
   }
@@ -210,7 +210,7 @@ export function genClassMethods(body, collect) {
   const nodeLists = body
   const methods = collect.classMethods
   if (Object.keys(methods).length) {
-    Object.keys(methods).forEach(key => {
+    Object.keys(methods).forEach((key) => {
       nodeLists.push(methods[key])
     })
   }
@@ -221,10 +221,10 @@ export function genComputeds(body, state: CollectState) {
   const { computeds } = state
   const computedNodes = processComputeds(computeds)
   const vuexComputedNodes = processVuexComputeds(state)
-  computedNodes.forEach(node => {
+  computedNodes.forEach((node) => {
     nodeLists.push(node)
   })
-  vuexComputedNodes.forEach(node => {
+  vuexComputedNodes.forEach((node) => {
     nodeLists.push(node)
   })
 }
@@ -232,7 +232,7 @@ export function genComputeds(body, state: CollectState) {
 export function genDatas(body, state: CollectState) {
   const nodeLists = body
   const { data } = state
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     if (key === '_statements') {
       return
     }
@@ -250,7 +250,7 @@ export function genDatas(body, state: CollectState) {
 export function genWatches(body: t.Node[], state: CollectState) {
   const nodeLists = body
   const { watches } = state
-  Object.keys(watches).forEach(key => {
+  Object.keys(watches).forEach((key) => {
     const { node, options } = watches[key]
     let cMethod: t.ClassMethod
     let funcNode: t.ObjectMethod | t.FunctionExpression

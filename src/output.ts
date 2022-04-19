@@ -1,12 +1,14 @@
-import * as prettier from 'prettier'
+import prettier from 'prettier/standalone'
+import pluginTypescript from 'prettier/parser-typescript'
 
 const PRETTIER_CONFIG = {
-  parser: 'babel',
+  parser: 'typescript',
   printWidth: 120,
   tabWidth: 2,
   singleQuote: true,
   semi: false,
   trailingComma: 'all',
+  plugins: [pluginTypescript],
 }
 
 export function formatScriptCode(code: string) {
